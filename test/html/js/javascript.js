@@ -5,7 +5,7 @@ sock.onopen = function(event){
     console.log(event);
 }
 sock.onmessage = function(event){
-    console.log(event);
+    console.log(JSON.parse(event.data));
 }
 
 function moveMouseX(amount){
@@ -18,4 +18,8 @@ function moveMouseY(amount){
 
 function leftMouseClick(){
     sock.send('{"command": "leftMouseClick"}')
+}
+
+function getFiles(path){
+    sock.send('{"command": "getFilesAndFolders", "absolutePath": "'+path+'"}')
 }

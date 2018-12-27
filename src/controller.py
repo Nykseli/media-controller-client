@@ -3,6 +3,7 @@
 from autobahn.twisted.websocket import WebSocketServerProtocol, \
     WebSocketServerFactory
 from libs.xdotool import XDoTool
+from libs.filemanager import FileManager
 from io import BytesIO
 
 import json
@@ -45,15 +46,18 @@ def requestParser(request_json):
         x_tool.leftMouseClick()
     elif(request_json['command'] == 'setMousePosition'):
         x_tool.setMousePosition(request_json['x'], request_json['y'])
+    elif(request_json['command'] == 'getFilesAndFolders'):
+        message = fileManager.getFilesAndFolders(request_json['absolutePath'])
+        MyServerProtocol.reportMessage(message)
 
 
 class MyServerProtocol(WebSocketServerProtocol):
 
-    connection = None
+    connections = []
 
     def onConnect(self, request):
         print("Client connecting: {0}".format(request.peer))
-        self.connection = self
+        self.connections.append(self)
 
     def onOpen(self):
         print("WebSocket connection open.")
@@ -80,11 +84,14 @@ class MyServerProtocol(WebSocketServerProtocol):
         self.sendMessage(payload, isBinary)
 
     def onClose(self, wasClean, code, reason):
+        self.connections.remove(self)
         print("WebSocket connection closed: {0}".format(reason))
 
     @classmethod
     def reportMessage(cls, message):
-        cls.callFromThread(cls.sendMessage, self.connection, message)
+        payload = json.dumps(message, ensure_ascii = False).encode('utf8')
+        for c in set(cls.connections):
+            reactor.callFromThread(cls.sendMessage, c, payload)
 
 
 
@@ -100,6 +107,8 @@ if __name__ == '__main__':
 
    # httpd = HTTPServer(('localhost', 8808), RequestHandler)
     #httpd.serve_forever()
+
+    fileManager = FileManager()
 
     import sys
 
