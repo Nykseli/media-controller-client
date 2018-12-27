@@ -4,6 +4,7 @@ from autobahn.twisted.websocket import WebSocketServerProtocol, \
     WebSocketServerFactory
 from libs.xdotool import XDoTool
 from libs.filemanager import FileManager
+from libs.audiomanager import AudioManager
 from io import BytesIO
 
 import json
@@ -49,7 +50,10 @@ def requestParser(request_json):
     elif(request_json['command'] == 'getFilesAndFolders'):
         message = fileManager.getFilesAndFolders(request_json['absolutePath'])
         MyServerProtocol.reportMessage(message)
-
+    elif(request_json['command'] == 'increaseMasterVolume'):
+        audioManager.increaseMasterVolume()
+    elif(request_json['command'] == 'decreaseMasterVolume'):
+        audioManager.decreaseMasterVolume()
 
 class MyServerProtocol(WebSocketServerProtocol):
 
@@ -109,6 +113,7 @@ if __name__ == '__main__':
     #httpd.serve_forever()
 
     fileManager = FileManager()
+    audioManager = AudioManager()
 
     import sys
 

@@ -23,3 +23,10 @@ function leftMouseClick(){
 function getFiles(path){
     sock.send('{"command": "getFilesAndFolders", "absolutePath": "'+path+'"}')
 }
+
+function increaseMasterVolume(){
+    sock.send('{"command": "increaseMasterVolume"}')
+}
+function decreaseMasterVolume(){
+    sock.send('{"command": "decreaseMasterVolume"}')
+}
