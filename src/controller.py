@@ -5,6 +5,7 @@ from autobahn.twisted.websocket import WebSocketServerProtocol, \
 from libs.xdotool import XDoTool
 from libs.filemanager import FileManager
 from libs.audiomanager import AudioManager
+from libs.vlcwrapper import VlcWrapper
 from io import BytesIO
 
 import json
@@ -54,6 +55,8 @@ def requestParser(request_json):
         audioManager.increaseMasterVolume()
     elif(request_json['command'] == 'decreaseMasterVolume'):
         audioManager.decreaseMasterVolume()
+    elif(request_json['command'] == 'playFile'):
+        vlcWrapper.playFile(request_json['absolutePath'])
 
 class MyServerProtocol(WebSocketServerProtocol):
 
@@ -114,6 +117,7 @@ if __name__ == '__main__':
 
     fileManager = FileManager()
     audioManager = AudioManager()
+    vlcWrapper = VlcWrapper()
 
     import sys
 
