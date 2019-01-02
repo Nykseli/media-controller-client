@@ -41,6 +41,8 @@ def requestParser(request_json):
         audioManager.increaseMasterVolume()
     elif(request_json['command'] == 'decreaseMasterVolume'):
         audioManager.decreaseMasterVolume()
+    elif(request_json['command'] == 'muteMasterVolume'):
+        audioManager.muteMasterVolume()
     elif(request_json['command'] == 'playFile'):
         vlcWrapper.playFile(request_json['absolutePath'])
     elif(request_json['command'] == 'getConfig'):

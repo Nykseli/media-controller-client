@@ -7,7 +7,10 @@ class AudioManager():
         pass
 
     def increaseMasterVolume(self):
-        os.system("amixer set 'Master' 5%+")
+        os.system("xdotool key XF86AudioRaiseVolume")
 
     def decreaseMasterVolume(self):
-        os.system("amixer set 'Master' 5%-")
+        os.system("xdotool key XF86AudioLowerVolume")
+
+    def muteMasterVolume(self):
+        os.system("xdotool key XF86AudioMute")
