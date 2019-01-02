@@ -6,40 +6,27 @@ from libs.xdotool import XDoTool
 from libs.filemanager import FileManager
 from libs.audiomanager import AudioManager
 from libs.vlcwrapper import VlcWrapper
+from libs.configmanager import ConfigManager
 from io import BytesIO
 
 import json
 import time
 
 
-# class RequestHandler(BaseHTTPRequestHandler):
+def returnConfig(request_json):
+    config = {}
+    config['config'] = {}
+    configType = request_json['configType']
+    if(configType == "vlc"):
+        config['config']['vlc'] = CONFIG['vlc']
 
-#     def handleRequestJson(self, body):
-#         try:
-#             request_json = json.loads(body.decode('utf-8'))
-#         except Exception as err:
-#             print(str(err))
-#             return
-#         print(str(request_json))
-#         if(request_json['command'] == 'moveMouseX'):
-#             x_tool.moveMouseX(request_json['amount'])
+    elif(configType == 'all'):
+        config['config'] = CONFIG
 
-#     def do_POST(self):
-
-#         self.send_response(200)
-#         self.send_header("Access-Control-Allow-Origin", "*")
-#         self.end_headers()
-#         #x_tool.setMousePosition(500, 500)
-#         content_length = int(self.headers['Content-Length'])
-#         body = self.rfile.read(content_length)
-#         self.handleRequestJson(body)
-#         print(str(body))
-#         response = BytesIO()
-#         response.write(b'Received: ')
-#         response.write(body)
-#         self.wfile.write(response.getvalue())
+    return config
 
 def requestParser(request_json):
+    message = None
     if(request_json['command'] == 'moveMouseX'):
         x_tool.moveMouseX(request_json['amount'])
     elif(request_json['command'] == 'moveMouseY'):
@@ -50,13 +37,18 @@ def requestParser(request_json):
         x_tool.setMousePosition(request_json['x'], request_json['y'])
     elif(request_json['command'] == 'getFilesAndFolders'):
         message = fileManager.getFilesAndFolders(request_json['absolutePath'])
-        MyServerProtocol.reportMessage(message)
     elif(request_json['command'] == 'increaseMasterVolume'):
         audioManager.increaseMasterVolume()
     elif(request_json['command'] == 'decreaseMasterVolume'):
         audioManager.decreaseMasterVolume()
     elif(request_json['command'] == 'playFile'):
         vlcWrapper.playFile(request_json['absolutePath'])
+    elif(request_json['command'] == 'getConfig'):
+        message = returnConfig(request_json)
+
+    if message:
+        MyServerProtocol.reportMessage(message)
+
 
 class MyServerProtocol(WebSocketServerProtocol):
 
@@ -103,21 +95,15 @@ class MyServerProtocol(WebSocketServerProtocol):
 
 
 if __name__ == '__main__':
+
     x_tool = XDoTool()
-    mouse_pos = x_tool.getMousePosition()
-    print(mouse_pos)
-    x_tool.setMousePosition(100, 200)
-    # time.sleep(2)
-    # x_tool.moveMouseX(10)
-    # time.sleep(2)
-    # x_tool.moveMouseY(10)
-
-   # httpd = HTTPServer(('localhost', 8808), RequestHandler)
-    #httpd.serve_forever()
-
     fileManager = FileManager()
     audioManager = AudioManager()
     vlcWrapper = VlcWrapper()
+    config = ConfigManager()
+
+    CONFIG = config.loadConfig()
+    print("loaded config: " + json.dumps(CONFIG['vlc']))
 
     import sys
 

@@ -1,0 +1,8 @@
+{
+    "vlc":{
+        "allowedFilePaths": [
+            "~/Documents"
+        ]
+    }
+
+}

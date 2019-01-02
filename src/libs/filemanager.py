@@ -5,7 +5,7 @@ class FileManager():
     def __init__(self):
         pass
 
-
+    #TODO: send error to user if absolutePath doesn't exists
     def getDirectories(self, absolutePath):
         directories = []
         for item in os.listdir(absolutePath):
