@@ -1,18 +1,18 @@
-# Mediacontroller Client
+# Mediacontroller Server
 
-Client part of the remote media controller see the client [here](https://github.com/Nykseli/android-media-controller)
+Server part of the remote media controller see the client [here](https://github.com/Nykseli/android-media-controller)
 
 ## How to run
 
 ```
-git clone https://github.com/Nykseli/media-controller-client
-cd media-controller-client
+git clone https://github.com/Nykseli/media-controller-server
+cd media-controller-server
 python3 src/controller.py
 ```
 
 ## Config
 
-You can put the [config.json](https://github.com/Nykseli/media-controller-client/blob/master/config.json.example) file to the project root or in ~/.MediaControllerClient/config.json
+You can put the [config.json](https://github.com/Nykseli/media-controller-server/blob/master/config.json.example) file to the project root or in ~/.MediaControllerClient/config.json
 
 ### Config structure
 
