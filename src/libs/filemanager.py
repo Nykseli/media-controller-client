@@ -1,4 +1,6 @@
 import os
+import errors
+from libs import VLC_CONFIG
 
 class FileManager():
 
@@ -22,12 +24,33 @@ class FileManager():
         files.sort()
         return files
 
-    def getFilesAndFolders(self, absolutePath):
+    def isFileTypeAllowed(self, fileName):
+        # If there is no vlc config at all. We can allow all filetypes
+        if not VLC_CONFIG:
+            return True
+        # If allowedFileTypes is not defined. We can allow all filetypes
+        elif not VLC_CONFIG['allowedFileTypes']:
+            return True
+
+        fileType = fileName.split(".")[-1]
+        if fileType in VLC_CONFIG['allowedFileTypes']:
+            return True
+
+        return False
+
+
+
+    def getFilesAndFolders(self, absolutePath) -> dict:
+
+        if not os.path.isdir(absolutePath):
+            return errors.error(errors.FILE_NOT_FOUND)
+
         filesAndFolders = {"files": [], "folders": [], "currentPath": absolutePath}
 
         for item in os.listdir(absolutePath):
             if not os.path.isdir(os.path.join(absolutePath, item)):
-                filesAndFolders['files'].append(item)
+                if self.isFileTypeAllowed(item):
+                    filesAndFolders['files'].append(item)
             else:
                 filesAndFolders['folders'].append(item)
 

@@ -1,11 +1,13 @@
 
 import os
 import json
+import errors
 
 class ConfigManager():
 
     def __init__(self):
         self.configPath = None
+        self.config = None
         self.findConfigPath()
 
     def findConfigPath(self):
@@ -17,14 +19,18 @@ class ConfigManager():
         if os.path.isfile("~/.XLinuxTool/config.json"):
             self.configPath = "~/.XLinuxTool/config.json"
             return
-            with open("~/.XLinuxTool/config.json") as jsonFile:
-                return json.loads(jsonFile.read())
 
 
-    def loadConfig(self):
+    def loadConfig(self) -> dict:
         if self.configPath:
             with open(self.configPath) as jsonFile:
-                return json.loads(jsonFile.read())
+                self.config = json.loads(jsonFile.read())
+                return self.config
         else:
-            #TODO: error message
+            return errors.error(errors.CONFIG_NOT_FOUND)
             pass
+
+    def loadVlcConfig(self) -> dict:
+        if self.config and self.config['vlc']:
+            return self.config['vlc']
+

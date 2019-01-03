@@ -6,7 +6,7 @@ from libs.xdotool import XDoTool
 from libs.filemanager import FileManager
 from libs.audiomanager import AudioManager
 from libs.vlcwrapper import VlcWrapper
-from libs.configmanager import ConfigManager
+from libs import CONFIG
 from io import BytesIO
 
 import json
@@ -28,23 +28,23 @@ def returnConfig(request_json):
 def requestParser(request_json):
     message = None
     if(request_json['command'] == 'moveMouseX'):
-        x_tool.moveMouseX(request_json['amount'])
+        message = x_tool.moveMouseX(request_json['amount'])
     elif(request_json['command'] == 'moveMouseY'):
-        x_tool.moveMouseY(request_json['amount'])
+        message = x_tool.moveMouseY(request_json['amount'])
     elif(request_json['command'] == 'leftMouseClick'):
-        x_tool.leftMouseClick()
+        message =  x_tool.leftMouseClick()
     elif(request_json['command'] == 'setMousePosition'):
-        x_tool.setMousePosition(request_json['x'], request_json['y'])
+        message = x_tool.setMousePosition(request_json['x'], request_json['y'])
     elif(request_json['command'] == 'getFilesAndFolders'):
         message = fileManager.getFilesAndFolders(request_json['absolutePath'])
     elif(request_json['command'] == 'increaseMasterVolume'):
-        audioManager.increaseMasterVolume()
+        message = audioManager.increaseMasterVolume()
     elif(request_json['command'] == 'decreaseMasterVolume'):
-        audioManager.decreaseMasterVolume()
+        message = audioManager.decreaseMasterVolume()
     elif(request_json['command'] == 'muteMasterVolume'):
-        audioManager.muteMasterVolume()
+        message = audioManager.muteMasterVolume()
     elif(request_json['command'] == 'playFile'):
-        vlcWrapper.playFile(request_json['absolutePath'])
+        message = vlcWrapper.playFile(request_json['absolutePath'])
     elif(request_json['command'] == 'getConfig'):
         message = returnConfig(request_json)
 
@@ -102,9 +102,7 @@ if __name__ == '__main__':
     fileManager = FileManager()
     audioManager = AudioManager()
     vlcWrapper = VlcWrapper()
-    config = ConfigManager()
 
-    CONFIG = config.loadConfig()
     print("loaded config: " + json.dumps(CONFIG['vlc']))
 
     import sys

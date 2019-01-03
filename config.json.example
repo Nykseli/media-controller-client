@@ -2,6 +2,10 @@
     "vlc":{
         "allowedFilePaths": [
             "~/Documents"
+        ],
+        "allowedFileTypes": [
+            "mp4",
+            "mkv"
         ]
     }
 
