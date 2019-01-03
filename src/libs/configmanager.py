@@ -16,8 +16,8 @@ class ConfigManager():
             return
 
 
-        if os.path.isfile("~/.XLinuxTool/config.json"):
-            self.configPath = "~/.XLinuxTool/config.json"
+        if os.path.isfile("~/.MediaControllerClient/config.json"):
+            self.configPath = "~/.MediaControllerClient/config.json"
             return
 
 
