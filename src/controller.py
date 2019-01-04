@@ -35,16 +35,20 @@ def configParser(request_json):
 
 def generalParser(request_json):
     message = None
+    optionalInfo = None
+    if 'optionalInfo' in request_json:
+        optionalInfo = request_json ['optionalInfo']
+
     if(request_json['command'] == 'moveMouseX'):
-        message = x_tool.moveMouseX(request_json['amount'])
+        message = x_tool.moveMouseX(optionalInfo['amount'])
     elif(request_json['command'] == 'moveMouseY'):
-        message = x_tool.moveMouseY(request_json['amount'])
+        message = x_tool.moveMouseY(optionalInfo['amount'])
     elif(request_json['command'] == 'leftMouseClick'):
         message =  x_tool.leftMouseClick()
     elif(request_json['command'] == 'setMousePosition'):
-        message = x_tool.setMousePosition(request_json['x'], request_json['y'])
+        message = x_tool.setMousePosition(optionalInfo['x'], optionalInfo['y'])
     elif(request_json['command'] == 'getFilesAndFolders'):
-        message = fileManager.getFilesAndFolders(request_json['absolutePath'])
+        message = fileManager.getFilesAndFolders(optionalInfo['absolutePath'])
     elif(request_json['command'] == 'increaseMasterVolume'):
         message = audioManager.increaseMasterVolume()
     elif(request_json['command'] == 'decreaseMasterVolume'):
@@ -56,8 +60,12 @@ def generalParser(request_json):
 
 def vlcParser(request_json):
     message = None
+    optionalInfo = None
+    if 'optionalInfo' in request_json:
+        optionalInfo = request_json ['optionalInfo']
+
     if(request_json['command'] == 'playFile'):
-        message = vlcWrapper.playFile(request_json['absolutePath'])
+        message = vlcWrapper.playFile(optionalInfo['absolutePath'])
     elif(request_json['command'] == 'pauseFile'):
         message = vlcWrapper.pauseFile()
     return message

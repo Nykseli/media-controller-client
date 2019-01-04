@@ -22,3 +22,45 @@ You can put the [config.json](https://github.com/Nykseli/media-controller-server
 | vlc.allowedFilePaths | Array | Contains list of allowed paths that can browsed by client ( currently Android client supports only one path) |
 | vlc.allowedFileTypes | Array | Contains list of allowed filetypes that can be browsed by client|
 
+## Websocket API
+
+Controlling divice with client works by sending text in json format to server.
+Basic structure is:
+```
+{
+    "interface": <Interface that command uses e.g. vlc>,
+    "command": <Command string>,
+    "optionalInfo": {
+        <Object that contains optional info that the command can use>
+    }
+}
+```
+
+### Interfaces
+
+Interfaces are as follows:
+
+* config
+  * Used to get configuration from server
+* general
+  * Used to control system settings e.g. volume, mouse and keyboard input, etc
+* vlc
+  * Used to control Vlc mediaplayer
+
+### Api doc
+
+Currently following commands are implemented
+
+|Interface|Command|Optional Info| Description|
+| ------- | ----- | ----------- | ---------- |
+| config  | getConfig | - | Get config.json contents. <br /> Response format: ```{"config": <object from config.json>```
+| general | moveMouseX | "amount": int | Moves mouse on x axis by x amount that is defined by ***amount***. ***amount*** can be negative. |
+| general | moveMouseY | "amount": int | Moves mouse on y axis by x amount that is defined by ***amount***. ***amount*** can be negative. |
+| general | leftMouseClick | - | Click with left mouse button |
+| general | setMousePosition | "x": int,  <br />"y": int | Set mouse position to ***x***,***y*** coordinate |
+| general | getFilesAndFolders | "absolutePath": string | Get files and folders in ***absolutePath***. <br /> Response format: ```{"files": string[], "folders": string[], "currentPath": absolutePath}```|
+| general | increaseMasterVolume | - | Increase system volume |
+| general | decreaseMasterVolume | - | Decrease system volume |
+| general | muteMasterVolume | - | Mute system volume |
+| vlc | pauseFile | - | Toggle vlc pause on/off |
+| vlc | playFile | "absolutePath": string | Play file defined by ***absolutePath***|
