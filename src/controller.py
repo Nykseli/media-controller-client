@@ -22,10 +22,18 @@ def returnConfig(request_json):
 
     elif(configType == 'all'):
         config['config'] = CONFIG
+    else:
+        config['config'] = CONFIG
 
     return config
 
-def requestParser(request_json):
+def configParser(request_json):
+    message = None
+    if(request_json['command'] == 'getConfig'):
+        message = returnConfig(request_json)
+    return message
+
+def generalParser(request_json):
     message = None
     if(request_json['command'] == 'moveMouseX'):
         message = x_tool.moveMouseX(request_json['amount'])
@@ -43,12 +51,26 @@ def requestParser(request_json):
         message = audioManager.decreaseMasterVolume()
     elif(request_json['command'] == 'muteMasterVolume'):
         message = audioManager.muteMasterVolume()
-    elif(request_json['command'] == 'playFile'):
+    return message
+
+
+def vlcParser(request_json):
+    message = None
+    if(request_json['command'] == 'playFile'):
         message = vlcWrapper.playFile(request_json['absolutePath'])
     elif(request_json['command'] == 'pauseFile'):
         message = vlcWrapper.pauseFile()
-    elif(request_json['command'] == 'getConfig'):
-        message = returnConfig(request_json)
+    return message
+
+
+def requestParser(request_json):
+    message = None
+    if(request_json['interface'] == 'config'):
+        message = configParser(request_json)
+    elif(request_json['interface'] == 'general'):
+        message = generalParser(request_json)
+    elif(request_json['interface'] == 'vlc'):
+        message = vlcParser(request_json)
 
     if message:
         MyServerProtocol.reportMessage(message)

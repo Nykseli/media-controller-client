@@ -86,7 +86,7 @@ class VlcWrapper():
 
     def increaseVolume(self):
         ''' Increase Vlc player volume doesn't affect system volume '''
-        self.sendVlcCommand(self.)
+        self.sendVlcCommand(self.INCREACE_VOLUME)
 
     def decreaseVolume(self):
         ''' Decrease Vlc player volume doesn't affect system volume '''
