@@ -6,6 +6,9 @@
         "allowedFileTypes": [
             "mp4",
             "mkv"
+        ],
+        "commandlineArguments": [
+            "--fullscreen"
         ]
     }
 

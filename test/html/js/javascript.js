@@ -1,5 +1,5 @@
 
-let sock = new WebSocket("ws://192.168.0.19:9000");
+let sock = new WebSocket("ws://localhost:9000");
 
 sock.onopen = function(event){
     console.log(event);
@@ -29,4 +29,12 @@ function increaseMasterVolume(){
 }
 function decreaseMasterVolume(){
     sock.send('{"command": "decreaseMasterVolume"}')
+}
+
+function playFile(filePath){
+    sock.send('{"command": "playFile", "absolutePath": "'+filePath+'"}');
+}
+
+function pauseFile(filePath){
+    sock.send('{"command": "pauseFile", "absolutePath": "'+filePath+'"}');
 }

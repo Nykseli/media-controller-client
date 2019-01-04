@@ -45,6 +45,8 @@ def requestParser(request_json):
         message = audioManager.muteMasterVolume()
     elif(request_json['command'] == 'playFile'):
         message = vlcWrapper.playFile(request_json['absolutePath'])
+    elif(request_json['command'] == 'pauseFile'):
+        message = vlcWrapper.pauseFile()
     elif(request_json['command'] == 'getConfig'):
         message = returnConfig(request_json)
 
