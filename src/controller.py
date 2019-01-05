@@ -2,81 +2,110 @@
 
 from autobahn.twisted.websocket import WebSocketServerProtocol, \
     WebSocketServerFactory
-from libs.xdotool import XDoTool
-from libs.filemanager import FileManager
-from libs.audiomanager import AudioManager
-from libs.vlcwrapper import VlcWrapper
 from libs import CONFIG
-from io import BytesIO
+
+# interfaces should be only imported in contoller.py
+import interface.audio
+import interface.config
+import interface.general
+import interface.mouse
+import interface.vlc
 
 import json
 import time
 
 
-def returnConfig(request_json):
-    config = {}
-    config['config'] = {}
-    configType = request_json['configType']
-    if(configType == "vlc"):
-        config['config']['vlc'] = CONFIG['vlc']
 
-    elif(configType == 'all'):
-        config['config'] = CONFIG
-    else:
-        config['config'] = CONFIG
+def audioParser(request_json):
+    ''' Parse request_json to use requested audio interface function'''
+    message = None
+    optionalInfo = None
+    if 'optionalInfo' in request_json:
+        optionalInfo = request_json ['optionalInfo']
 
-    return config
+    if(request_json['command'] == 'decreaseMasterVolume'):
+        message = interface.audio.decreaseMasterVolume()
+    elif(request_json['command'] == 'increaseMasterVolume'):
+        message = interface.audio.increaseMasterVolume()
+    elif(request_json['command'] == 'muteMasterVolume'):
+        message = interface.audio.muteMasterVolume()
+
+    return message
+    pass
 
 def configParser(request_json):
+    ''' Parse request_json to use requested config interface function'''
     message = None
     if(request_json['command'] == 'getConfig'):
-        message = returnConfig(request_json)
+        message = interface.config.getConfig(request_json)
     return message
 
 def generalParser(request_json):
+    ''' Parse request_json to use requested general interface function'''
+    message = None
+    optionalInfo = None
+    if 'optionalInfo' in request_json:
+        optionalInfo = request_json ['optionalInfo']
+
+    if(request_json['command'] == 'getFilesAndFolders'):
+        message = interface.general.getFilesAndFolders(optionalInfo['absolutePath'])
+
+    return message
+
+def keyboadParser(request_json):
+    ''' Parse request_json to use requested keyboard interface function'''
+    message = None
+    optionalInfo = None
+    if 'optionalInfo' in request_json:
+        optionalInfo = request_json ['optionalInfo']
+    # TODO: implement keyboard interface
+    return message
+
+def mouseParser(request_json):
+    ''' Parse request_json to use requested mouse interface function'''
     message = None
     optionalInfo = None
     if 'optionalInfo' in request_json:
         optionalInfo = request_json ['optionalInfo']
 
     if(request_json['command'] == 'moveMouseX'):
-        message = x_tool.moveMouseX(optionalInfo['amount'])
+        message = interface.mouse.moveMouseX(optionalInfo['amount'])
     elif(request_json['command'] == 'moveMouseY'):
-        message = x_tool.moveMouseY(optionalInfo['amount'])
+        message = interface.mouse.moveMouseY(optionalInfo['amount'])
     elif(request_json['command'] == 'leftMouseClick'):
-        message =  x_tool.leftMouseClick()
+        message =  interface.mouse.leftMouseClick()
     elif(request_json['command'] == 'setMousePosition'):
-        message = x_tool.setMousePosition(optionalInfo['x'], optionalInfo['y'])
-    elif(request_json['command'] == 'getFilesAndFolders'):
-        message = fileManager.getFilesAndFolders(optionalInfo['absolutePath'])
-    elif(request_json['command'] == 'increaseMasterVolume'):
-        message = audioManager.increaseMasterVolume()
-    elif(request_json['command'] == 'decreaseMasterVolume'):
-        message = audioManager.decreaseMasterVolume()
-    elif(request_json['command'] == 'muteMasterVolume'):
-        message = audioManager.muteMasterVolume()
+        message = interface.mouse.setMousePosition(optionalInfo['x'], optionalInfo['y'])
+
     return message
 
-
 def vlcParser(request_json):
+    ''' Parse request_json to use requested vlc interface function'''
     message = None
     optionalInfo = None
     if 'optionalInfo' in request_json:
         optionalInfo = request_json ['optionalInfo']
 
     if(request_json['command'] == 'playFile'):
-        message = vlcWrapper.playFile(optionalInfo['absolutePath'])
+        message = interface.vlc.playFile(optionalInfo['absolutePath'])
     elif(request_json['command'] == 'pauseFile'):
-        message = vlcWrapper.pauseFile()
+        message = interface.vlc.pauseFile()
+
     return message
 
 
 def requestParser(request_json):
     message = None
-    if(request_json['interface'] == 'config'):
+    if(request_json['interface'] == 'audio'):
+        message = audioParser(request_json)
+    elif(request_json['interface'] == 'config'):
         message = configParser(request_json)
     elif(request_json['interface'] == 'general'):
         message = generalParser(request_json)
+    elif(request_json['interface'] == 'keyboard'):
+        message = keyboadParser(request_json)
+    elif(request_json['interface'] == 'mouse'):
+        message = mouseParser(request_json)
     elif(request_json['interface'] == 'vlc'):
         message = vlcParser(request_json)
 
@@ -129,11 +158,6 @@ class MyServerProtocol(WebSocketServerProtocol):
 
 
 if __name__ == '__main__':
-
-    x_tool = XDoTool()
-    fileManager = FileManager()
-    audioManager = AudioManager()
-    vlcWrapper = VlcWrapper()
 
     import sys
 

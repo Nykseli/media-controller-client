@@ -40,10 +40,15 @@ Basic structure is:
 
 Interfaces are as follows:
 
+* audio
+  * Used to control system audio
 * config
   * Used to get configuration from server
 * general
   * Used to control system settings e.g. volume, mouse and keyboard input, etc
+* mouse
+  * Used to emulate mouse functionality. e.g. movement and clicks
+
 * vlc
   * Used to control Vlc mediaplayer
 
@@ -53,14 +58,14 @@ Currently following commands are implemented
 
 |Interface|Command|Optional Info| Description|
 | ------- | ----- | ----------- | ---------- |
+| audio | decreaseMasterVolume | - | Decrease system volume |
+| audio | increaseMasterVolume | - | Increase system volume |
+| audio | muteMasterVolume | - | Mute system volume |
 | config  | getConfig | - | Get config.json contents. <br /> Response format: ```{"config": <object from config.json>```
-| general | moveMouseX | "amount": int | Moves mouse on x axis by x amount that is defined by ***amount***. ***amount*** can be negative. |
-| general | moveMouseY | "amount": int | Moves mouse on y axis by x amount that is defined by ***amount***. ***amount*** can be negative. |
-| general | leftMouseClick | - | Click with left mouse button |
-| general | setMousePosition | "x": int,  <br />"y": int | Set mouse position to ***x***,***y*** coordinate |
 | general | getFilesAndFolders | "absolutePath": string | Get files and folders in ***absolutePath***. <br /> Response format: ```{"files": string[], "folders": string[], "currentPath": absolutePath}```|
-| general | increaseMasterVolume | - | Increase system volume |
-| general | decreaseMasterVolume | - | Decrease system volume |
-| general | muteMasterVolume | - | Mute system volume |
+| mouse | moveMouseX | "amount": int | Moves mouse on x axis by x amount that is defined by ***amount***. ***amount*** can be negative. |
+| mouse | moveMouseY | "amount": int | Moves mouse on y axis by x amount that is defined by ***amount***. ***amount*** can be negative. |
+| mouse | leftMouseClick | - | Click with left mouse button |
+| mouse | setMousePosition | "x": int,  <br />"y": int | Set mouse position to ***x***,***y*** coordinate |
 | vlc | pauseFile | - | Toggle vlc pause on/off |
 | vlc | playFile | "absolutePath": string | Play file defined by ***absolutePath***|
