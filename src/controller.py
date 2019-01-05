@@ -135,8 +135,6 @@ if __name__ == '__main__':
     audioManager = AudioManager()
     vlcWrapper = VlcWrapper()
 
-    print("loaded config: " + json.dumps(CONFIG['vlc']))
-
     import sys
 
     from twisted.python import log

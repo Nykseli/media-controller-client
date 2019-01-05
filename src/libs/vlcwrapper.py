@@ -1,4 +1,4 @@
-from subprocess import Popen, PIPE
+from subprocess import Popen, check_output, PIPE
 from libs import VLC_CONFIG
 import os
 import signal
@@ -38,8 +38,18 @@ class VlcWrapper():
 
     def initVlcPlayer(self):
         '''Start Vlc process with rc module and connect socket to it'''
+        self.killOldVlcProsess()
         self.vlcProcess = Popen(self.getCommandList())
+        # Connect to socket with thread so it doesn't block any other functionality
         threading.Thread(target=self.connectSocket).start()
+
+    def killOldVlcProsess(self):
+        ''' Kill all vlc procesess '''
+        try:
+            # subprosess.check_output is syncronous so it blocks until killall is completed
+            check_output(['killall', 'vlc'])
+        except:
+            pass
 
     def connectSocket(self):
         '''Loops until socket is connected'''
@@ -58,7 +68,7 @@ class VlcWrapper():
             "rc",
             "--rc-host=%s:%s" % (self.HOST, self.PORT),
         ]
-        if VLC_CONFIG and VLC_CONFIG['commandlineArguments']:
+        if VLC_CONFIG and 'commandlineArguments' in VLC_CONFIG:
             argumentList.extend(VLC_CONFIG['commandlineArguments'])
         return argumentList
 
