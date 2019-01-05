@@ -8,12 +8,12 @@ sock.onmessage = function(event){
     console.log(JSON.parse(event.data));
 }
 
-function commandBuilder(interface, command, optionalInfo){
-    if(optionalInfo){
+function commandBuilder(interface, command, additionalInfo){
+    if(additionalInfo){
         command = {
             "interface": interface,
             "command": command,
-            "optionalInfo": optionalInfo
+            "additionalInfo": additionalInfo
         }
     }else{
         command = {

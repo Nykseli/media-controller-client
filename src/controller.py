@@ -19,9 +19,9 @@ import time
 def audioParser(request_json):
     ''' Parse request_json to use requested audio interface function'''
     message = None
-    optionalInfo = None
-    if 'optionalInfo' in request_json:
-        optionalInfo = request_json ['optionalInfo']
+    additionalInfo = None
+    if 'additionalInfo' in request_json:
+        additionalInfo = request_json ['additionalInfo']
 
     if(request_json['command'] == 'decreaseMasterVolume'):
         message = interface.audio.decreaseMasterVolume()
@@ -43,51 +43,51 @@ def configParser(request_json):
 def generalParser(request_json):
     ''' Parse request_json to use requested general interface function'''
     message = None
-    optionalInfo = None
-    if 'optionalInfo' in request_json:
-        optionalInfo = request_json ['optionalInfo']
+    additionalInfo = None
+    if 'additionalInfo' in request_json:
+        additionalInfo = request_json ['additionalInfo']
 
     if(request_json['command'] == 'getFilesAndFolders'):
-        message = interface.general.getFilesAndFolders(optionalInfo['absolutePath'])
+        message = interface.general.getFilesAndFolders(additionalInfo['absolutePath'])
 
     return message
 
 def keyboadParser(request_json):
     ''' Parse request_json to use requested keyboard interface function'''
     message = None
-    optionalInfo = None
-    if 'optionalInfo' in request_json:
-        optionalInfo = request_json ['optionalInfo']
+    additionalInfo = None
+    if 'additionalInfo' in request_json:
+        additionalInfo = request_json ['additionalInfo']
     # TODO: implement keyboard interface
     return message
 
 def mouseParser(request_json):
     ''' Parse request_json to use requested mouse interface function'''
     message = None
-    optionalInfo = None
-    if 'optionalInfo' in request_json:
-        optionalInfo = request_json ['optionalInfo']
+    additionalInfo = None
+    if 'additionalInfo' in request_json:
+        additionalInfo = request_json ['additionalInfo']
 
     if(request_json['command'] == 'moveMouseX'):
-        message = interface.mouse.moveMouseX(optionalInfo['amount'])
+        message = interface.mouse.moveMouseX(additionalInfo['amount'])
     elif(request_json['command'] == 'moveMouseY'):
-        message = interface.mouse.moveMouseY(optionalInfo['amount'])
+        message = interface.mouse.moveMouseY(additionalInfo['amount'])
     elif(request_json['command'] == 'leftMouseClick'):
         message =  interface.mouse.leftMouseClick()
     elif(request_json['command'] == 'setMousePosition'):
-        message = interface.mouse.setMousePosition(optionalInfo['x'], optionalInfo['y'])
+        message = interface.mouse.setMousePosition(additionalInfo['x'], additionalInfo['y'])
 
     return message
 
 def vlcParser(request_json):
     ''' Parse request_json to use requested vlc interface function'''
     message = None
-    optionalInfo = None
-    if 'optionalInfo' in request_json:
-        optionalInfo = request_json ['optionalInfo']
+    additionalInfo = None
+    if 'additionalInfo' in request_json:
+        additionalInfo = request_json ['additionalInfo']
 
     if(request_json['command'] == 'playFile'):
-        message = interface.vlc.playFile(optionalInfo['absolutePath'])
+        message = interface.vlc.playFile(additionalInfo['absolutePath'])
     elif(request_json['command'] == 'pauseFile'):
         message = interface.vlc.pauseFile()
 

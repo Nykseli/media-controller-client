@@ -30,8 +30,8 @@ Basic structure is:
 {
     "interface": <Interface that command uses e.g. vlc>,
     "command": <Command string>,
-    "optionalInfo": {
-        <Object that contains optional info that the command can use>
+    "additionalInfo": {
+        <Object that contains additional info that the command can use>
     }
 }
 ```
@@ -56,7 +56,7 @@ Interfaces are as follows:
 
 Currently following commands are implemented
 
-|Interface|Command|Optional Info| Description|
+|Interface|Command|Additional Info| Description|
 | ------- | ----- | ----------- | ---------- |
 | audio | decreaseMasterVolume | - | Decrease system volume |
 | audio | increaseMasterVolume | - | Increase system volume |
