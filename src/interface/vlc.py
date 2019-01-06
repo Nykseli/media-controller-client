@@ -1,3 +1,6 @@
+import errors
+import messageobject
+from interface import VLC_INTERFACE
 from libs.vlcwrapper import VlcWrapper
 
 __VLC_PLAYER = None
@@ -7,8 +10,30 @@ def __isVlcUsable():
     if __VLC_PLAYER:
         return True
     else:
-        __ERROR_MESSGE = {"error": "Vlc player not initialized"}
+        __ERROR_MESSGE = errors.error(errors.VLC_NOT_INIT)
     return False
+
+def increaseVolume():
+    '''Call VlcWrapper increaseVolume function'''
+    if not __isVlcUsable():
+        return __ERROR_MESSGE
+
+    return __VLC_PLAYER.increaseVolume()
+
+def decreaseVolume():
+    '''Call VlcWrapper decreaseVolume function'''
+    if not __isVlcUsable():
+        return __ERROR_MESSGE
+
+    return __VLC_PLAYER.decreaseVolume()
+
+
+def muteVolume():
+    '''Call VlcWrapper muteVolume function'''
+    if not __isVlcUsable():
+        return __ERROR_MESSGE
+
+    return __VLC_PLAYER.muteVolume()
 
 def playFile(absolutePath):
     '''Call VlcWrapper playFile function'''
@@ -25,6 +50,22 @@ def pauseFile():
 
     return __VLC_PLAYER.pauseFile()
 
+def getCurrentlyPlaying():
+    ''' Call VlcWrapper getCurrentlyPlaying function '''
+    if not __isVlcUsable():
+        return __ERROR_MESSGE
+
+    currentlyPlaying = __VLC_PLAYER.getCurrentlyPlaying()
+    messagedata = {"currentlyPlaying" : currentlyPlaying}
+    return messageobject.getMessageObject(VLC_INTERFACE, messagedata)
+
+def fastFroward():
+    #TODO:
+    pass
+
+def rewind():
+    #TODO:
+    pass
 
 if __name__ == 'interface.vlc':
     # Vlc player needs to be initialized when vlc interface is imported

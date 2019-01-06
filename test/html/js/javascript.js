@@ -52,6 +52,22 @@ function playFile(filePath){
     sock.send(commandBuilder("vlc", "playFile", {"absolutePath": filePath}));
 }
 
+function getCurrentlyPlaying(filePath){
+    sock.send(commandBuilder("vlc", "getCurrentlyPlaying", {"absolutePath": filePath}));
+}
+
+function increaseVlcVolume(){
+    sock.send(commandBuilder("vlc", "increaseVolume"));
+}
+
+function decreaseVlcVolume(){
+    sock.send(commandBuilder("vlc", "decreaseVolume"));
+}
+
+function muteVlcVolume(){
+    sock.send(commandBuilder("vlc", "muteVolume"));
+}
+
 function pauseFile(filePath){
     sock.send(commandBuilder("vlc", "pauseFile"));
 }

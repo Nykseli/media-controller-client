@@ -5,6 +5,7 @@ from autobahn.twisted.websocket import WebSocketServerProtocol, \
 from libs import CONFIG
 
 # interfaces should be only imported in contoller.py
+import interface
 import interface.audio
 import interface.config
 import interface.general
@@ -86,27 +87,35 @@ def vlcParser(request_json):
     if 'additionalInfo' in request_json:
         additionalInfo = request_json ['additionalInfo']
 
-    if(request_json['command'] == 'playFile'):
+    if(request_json['command'] == 'increaseVolume'):
+        message = interface.vlc.increaseVolume()
+    elif(request_json['command'] == 'decreaseVolume'):
+        message = interface.vlc.decreaseVolume()
+    elif(request_json['command'] == 'muteVolume'):
+        message = interface.vlc.muteVolume()
+    elif(request_json['command'] == 'playFile'):
         message = interface.vlc.playFile(additionalInfo['absolutePath'])
     elif(request_json['command'] == 'pauseFile'):
         message = interface.vlc.pauseFile()
+    elif(request_json['command'] == 'getCurrentlyPlaying'):
+        message = interface.vlc.getCurrentlyPlaying()
 
     return message
 
 
 def requestParser(request_json):
     message = None
-    if(request_json['interface'] == 'audio'):
+    if(request_json['interface'] == interface.AUDIO_INTERFACE):
         message = audioParser(request_json)
-    elif(request_json['interface'] == 'config'):
+    elif(request_json['interface'] == interface.CONFIG_INTERFACE):
         message = configParser(request_json)
-    elif(request_json['interface'] == 'general'):
+    elif(request_json['interface'] == interface.GENERAL_INTERFACE):
         message = generalParser(request_json)
-    elif(request_json['interface'] == 'keyboard'):
+    elif(request_json['interface'] == interface.KEYBOARD_INTERFACE):
         message = keyboadParser(request_json)
-    elif(request_json['interface'] == 'mouse'):
+    elif(request_json['interface'] == interface.MOUSE_INTERFACE):
         message = mouseParser(request_json)
-    elif(request_json['interface'] == 'vlc'):
+    elif(request_json['interface'] == interface.VLC_INTERFACE):
         message = vlcParser(request_json)
 
     if message:
@@ -143,7 +152,7 @@ class MyServerProtocol(WebSocketServerProtocol):
                 requestParser(command)
 
         # echo back message verbatim
-        self.sendMessage(payload, isBinary)
+        # self.sendMessage(payload, isBinary)
 
     def onClose(self, wasClean, code, reason):
         self.connections.remove(self)

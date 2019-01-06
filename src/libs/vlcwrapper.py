@@ -1,6 +1,8 @@
 from subprocess import Popen, check_output, PIPE
 from libs import VLC_CONFIG
 import os
+import errno
+#import fcntl
 import signal
 import socket
 import threading
@@ -23,27 +25,42 @@ class VlcWrapper():
     # Set vlc player volume to 0
     MUTE_VOLUME = "volume 0"
     # Loweer audio volume 1 step
-    DECREACE_VOLUME = "volup 1"
+    DECREACE_VOLUME = "voldown 1"
     # Raise audio volume 1 step
-    INCREACE_VOLUME = "voldown 1"
+    INCREACE_VOLUME = "volup 1"
     # Shutdown vlc player
     CLOSE_PLAYER = "shutdown"
+    # Get title of currently playing media
+    CURRENTLY_PLAYING = "get_title"
+    ### Default socket variables ###
+    # Default socket host. TODO: make this configurable in config.json
+    SOCKET_HOST = 'localhost'
+    # Default socket port. TODO: make this configurable in config.json
+    SOCKET_PORT = 8888
+    # Defines how long recv waits data to show in buffer before timing out
+    SOCKET_TIMEOUT = 0.1
+    # Buffer reader bytes amount.
+    # This defines maximum amount of bytes that the socket can read from buffer
+    BUFFER_BYTE_AMOUNT = 4096
+    # Encoding that is used to decode data from socket buffer
+    BUFFER_ENCODING = 'utf-8'
+
+
 
     def __init__(self):
         self.vlcProcess = None
-        self.HOST = 'localhost'
-        self.PORT = 8888
         self.SOCK = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.initVlcPlayer()
 
     def initVlcPlayer(self):
         '''Start Vlc process with rc module and connect socket to it'''
-        self.killOldVlcProsess()
-        self.vlcProcess = Popen(self.getCommandList())
-        # Connect to socket with thread so it doesn't block any other functionality
-        threading.Thread(target=self.connectSocket).start()
+        self.__killOldVlcProsess()
+        self.vlcProcess = Popen(self.__getCommandList(), stdout=PIPE)
+        # Excecute __initSocketConnection on thread so it doesn't block
+        # other functionality if there is a problem with connecting
+        threading.Thread(target=self.__initSocketConnection).start()
 
-    def killOldVlcProsess(self):
+    def __killOldVlcProsess(self):
         ''' Kill all vlc procesess '''
         try:
             # subprosess.check_output is syncronous so it blocks until killall is completed
@@ -51,13 +68,21 @@ class VlcWrapper():
         except:
             pass
 
-    def connectSocket(self):
-        '''Loops until socket is connected'''
-        # connect_ex returns 0 if connection was succesfull
-        while self.SOCK.connect_ex((self.HOST, self.PORT)) != 0:
+    def __initSocketConnection(self):
+        '''Init rc module socket connection'''
+        # Loop until socket is connected
+        # connect_ex returns 0 if connection was succesful
+        while self.SOCK.connect_ex((self.SOCKET_HOST, self.SOCKET_PORT)) != 0:
             time.sleep(0.1)
 
-    def getCommandList(self):
+        # Set socket time out so it waits a while to make sure data is written to buffer
+        # This also prevents reading from buffer from blocking
+        self.SOCK.settimeout(self.SOCKET_TIMEOUT)
+        # When rc module starts, it writes data to socket buffer that we don't
+        # want to read later
+        self.__emptyReaderBuffer()
+
+    def __getCommandList(self):
         '''
         Get needed commandline arguments to start vlc with rc module.
         If config.json has defined commandlineArguments, append them to arguments
@@ -66,7 +91,7 @@ class VlcWrapper():
             "vlc",
             "-I",
             "rc",
-            "--rc-host=%s:%s" % (self.HOST, self.PORT),
+            "--rc-host={}:{}".format(self.SOCKET_HOST, self.SOCKET_PORT),
         ]
         if VLC_CONFIG and 'commandlineArguments' in VLC_CONFIG:
             argumentList.extend(VLC_CONFIG['commandlineArguments'])
@@ -76,12 +101,19 @@ class VlcWrapper():
         os.kill(self.vlcProcess.pid, signal.SIGTERM)
         pass
 
-    def sendVlcCommand(self, cmd):
-        '''Prepare a command and send it to VLC'''
+    def sendVlcCommand(self, cmd, emptyBuffer=True):
+        '''
+        Prepare a command and send it to VLC and empty socket buffer by default.
+        Set seconda argument emptyBuffer if you need the data from
+        socket buffer e.g. currently playing title
+        '''
         if not cmd.endswith('\n'):
             cmd = cmd + '\n'
         cmd = cmd.encode()
         self.SOCK.sendall(cmd)
+
+        if emptyBuffer:
+            self.__emptyReaderBuffer()
 
     # playFile supports only single file
     def playFile(self, absolutePath):
@@ -107,6 +139,7 @@ class VlcWrapper():
         self.sendVlcCommand(self.MUTE_VOLUME)
 
     def addToPlaylist(self, path):
+        '''Add item to playlist path should be absolute path'''
         command = "{} {}".format(self.ADD_TO_PLAYLIST, path)
         self.sendVlcCommand(command)
 
@@ -117,3 +150,37 @@ class VlcWrapper():
         ''' Close vlc process and set self.vlcProsess to None '''
         self.vlcProcess = None
         self.sendVlcCommand(self.CLOSE_PLAYER)
+
+    def getCurrentlyPlaying(self):
+        '''Get title of currently playing media'''
+        self.sendVlcCommand("get_title", False)
+        return self.__formatedSocketData()
+
+    def __formatedSocketData(self) -> str:
+        '''
+        Get data from socket buffer, decode it and remove four last useless bytes
+        that vlc rc module always writes to socket buffer
+        '''
+        bufferData = self.__readDataFromSocket()
+        bufferString = bufferData.decode(self.BUFFER_ENCODING)
+        # remove "\t\n> " string from end
+        return bufferString[:-4]
+
+    def __emptyReaderBuffer(self):
+        ''' Read data from buffer until there is data. This makes sure that buffer is empty '''
+        while True:
+            data = self.__readDataFromSocket()
+            if not data:
+                time.sleep(0.1)
+            else:
+                # Data found
+                break
+
+    def __readDataFromSocket(self) -> bytes:
+        """ Try to read data from socket. Return empty bytes if no data currently in the buffer. """
+        try:
+            return self.SOCK.recv(self.BUFFER_BYTE_AMOUNT)
+        except Exception as err:
+            # No data
+            pass
+        return b''
