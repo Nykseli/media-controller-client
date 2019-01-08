@@ -2,7 +2,8 @@
 
 from autobahn.twisted.websocket import WebSocketServerProtocol, \
     WebSocketServerFactory
-from libs import CONFIG
+from libs import CRYPTO_CONFIG
+import libs.crypto
 
 # interfaces should be only imported in contoller.py
 import interface
@@ -119,7 +120,10 @@ def requestParser(request_json):
         message = vlcParser(request_json)
 
     if message:
-        MyServerProtocol.reportMessage(message)
+        if CRYPTO_SECRET_KEY:
+            MyServerProtocol.reportCryptedMessage(message)
+        else:
+            MyServerProtocol.reportMessage(message)
 
 
 class MyServerProtocol(WebSocketServerProtocol):
@@ -136,6 +140,8 @@ class MyServerProtocol(WebSocketServerProtocol):
     def onMessage(self, payload, isBinary):
         if isBinary:
             print("Binary message received: {0} bytes".format(len(payload)))
+            # Byte data is interpeted as crypted messsage
+            payload = libs.crypto.decryptMessageCFB(CRYPTO_SECRET_KEY, payload)
         else:
             print("Text message received: {0}".format(payload.decode('utf8')))
 
@@ -160,10 +166,19 @@ class MyServerProtocol(WebSocketServerProtocol):
 
     @classmethod
     def reportMessage(cls, message):
+        ''' Report plain text message to all connected clients '''
         payload = json.dumps(message, ensure_ascii = False).encode('utf8')
         for c in set(cls.connections):
             reactor.callFromThread(cls.sendMessage, c, payload)
 
+    @classmethod
+    def reportCryptedMessage(cls, message):
+        ''' Report crypted message to all connected clients '''
+        messageStr = json.dumps(message, ensure_ascii = False)
+        payload = libs.crypto.cryptMessageCFB(CRYPTO_SECRET_KEY, messageStr)
+        print(type(payload))
+        for c in set(cls.connections):
+            reactor.callFromThread(cls.sendMessage, c, payload, True)
 
 
 if __name__ == '__main__':
@@ -179,7 +194,9 @@ if __name__ == '__main__':
     factory.protocol = MyServerProtocol
     # factory.setProtocolOptions(maxConnections=2)
 
-    # note to self: if using putChild, the child must be bytes...
+    CRYPTO_SECRET_KEY = None
+    if CRYPTO_CONFIG:
+        CRYPTO_SECRET_KEY = CRYPTO_CONFIG['secretKey']
 
     reactor.listenTCP(9000, factory)
     reactor.run()

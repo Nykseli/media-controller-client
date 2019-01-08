@@ -41,6 +41,10 @@ function getFiles(path){
     sock.send(commandBuilder("general", "getFilesAndFolders", {"absolutePath": path}));
 }
 
+function getConfig(){
+    sock.send(commandBuilder("config", "getConfig"));
+}
+
 function increaseMasterVolume(){
     sock.send(commandBuilder("general", "increaseMasterVolume"));
 }
