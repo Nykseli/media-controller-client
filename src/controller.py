@@ -98,6 +98,10 @@ def vlcParser(request_json):
         message = interface.vlc.playFile(additionalInfo['absolutePath'])
     elif(request_json['command'] == 'pauseFile'):
         message = interface.vlc.pauseFile()
+    elif(request_json['command'] == 'fastForward'):
+        message = interface.vlc.fastForward()
+    elif(request_json['command'] == 'rewind'):
+        message = interface.vlc.rewind()
     elif(request_json['command'] == 'getCurrentlyPlaying'):
         message = interface.vlc.getCurrentlyPlaying()
 

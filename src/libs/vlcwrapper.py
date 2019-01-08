@@ -32,6 +32,15 @@ class VlcWrapper():
     CLOSE_PLAYER = "shutdown"
     # Get title of currently playing media
     CURRENTLY_PLAYING = "get_title"
+
+    ## List of hotkeys can be found https://wiki.videolan.org/Hotkeys_table
+    # Toggle mute on/off
+    HOTKEY_VOLUME_MUTE = "hotkey key-vol-mute"
+    # Fastforward 10 secods
+    HOTKEY_FAST_FORWARD = "hotkey key-jump+short"
+    # Rewind 10 secods
+    HOTKEY_FAST_REWIND = "hotkey key-jump-short"
+
     ### Default socket variables ###
     # Default socket host. TODO: make this configurable in config.json
     SOCKET_HOST = 'localhost'
@@ -126,6 +135,14 @@ class VlcWrapper():
         ''' Toggle pause on/off '''
         self.sendVlcCommand(self.PAUSE_FILE)
 
+    def fastForward(self):
+        ''' Fast forward 10 secods'''
+        self.sendVlcCommand(self.HOTKEY_FAST_FORWARD)
+
+    def rewind(self):
+        ''' Rewind 10 secods'''
+        self.sendVlcCommand(self.HOTKEY_FAST_REWIND)
+
     def increaseVolume(self):
         ''' Increase Vlc player volume doesn't affect system volume '''
         self.sendVlcCommand(self.INCREACE_VOLUME)
@@ -136,7 +153,7 @@ class VlcWrapper():
 
     def muteVolume(self):
         ''' Mute Vlc player volume doesn't affect system volume '''
-        self.sendVlcCommand(self.MUTE_VOLUME)
+        self.sendVlcCommand(self.HOTKEY_VOLUME_MUTE)
 
     def addToPlaylist(self, path):
         '''Add item to playlist path should be absolute path'''

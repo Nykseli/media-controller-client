@@ -75,3 +75,9 @@ function muteVlcVolume(){
 function pauseFile(filePath){
     sock.send(commandBuilder("vlc", "pauseFile"));
 }
+function fastForward(){
+    sock.send(commandBuilder("vlc", "fastForward"));
+}
+function rewind(){
+    sock.send(commandBuilder("vlc", "rewind"));
+}

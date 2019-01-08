@@ -94,5 +94,5 @@ Currently following commands are implemented
 | vlc | playFile | "absolutePath": string | Play file defined by ***absolutePath***|
 | vlc | increaseVolume | - | Increace Vlc volume by one step (5%) |
 | vlc | decreaseVolume | - | Decreace Vlc volume by one step (5%) |
-| vlc | muteVolume | - | Mute Vlc volume by one step (5%) |
+| vlc | muteVolume | - | Toggle Vlc mute on/off |
 | vlc | getCurrentlyPlaying | - | Get title of currently playing file. <br/> Response format: ```{"interface": "vlc", "messageData": {"currentlyPlaying": string }}```. <br /> ***currentlyPlaying*** is empty if medialist is empty. |

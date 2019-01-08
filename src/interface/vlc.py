@@ -50,6 +50,20 @@ def pauseFile():
 
     return __VLC_PLAYER.pauseFile()
 
+def fastForward():
+    ''' Call VlcWrapper fastForward function'''
+    if not __isVlcUsable():
+        return __ERROR_MESSGE
+
+    return __VLC_PLAYER.fastForward()
+
+def rewind():
+    ''' Call VlcWrapper rewind function'''
+    if not __isVlcUsable():
+        return __ERROR_MESSGE
+
+    return __VLC_PLAYER.rewind()
+
 def getCurrentlyPlaying():
     ''' Call VlcWrapper getCurrentlyPlaying function '''
     if not __isVlcUsable():
@@ -58,14 +72,6 @@ def getCurrentlyPlaying():
     currentlyPlaying = __VLC_PLAYER.getCurrentlyPlaying()
     messagedata = {"currentlyPlaying" : currentlyPlaying}
     return messageobject.getMessageObject(VLC_INTERFACE, messagedata)
-
-def fastFroward():
-    #TODO:
-    pass
-
-def rewind():
-    #TODO:
-    pass
 
 if __name__ == 'interface.vlc':
     # Vlc player needs to be initialized when vlc interface is imported
