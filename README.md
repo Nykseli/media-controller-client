@@ -18,9 +18,32 @@ You can put the [config.json](https://github.com/Nykseli/media-controller-server
 
 | Key | Type | Description |
 |-----| -----| ------      |
+| crypto | Object | Contains config of the security settings|
+| crypto.secretKey | String | Ascii string with length of 16 that is used to encrypt and decrypt messages |
 | vlc |Object| Contains vlc configs|
-| vlc.allowedFilePaths | Array | Contains list of allowed paths that can browsed by client ( currently Android client supports only one path) |
-| vlc.allowedFileTypes | Array | Contains list of allowed filetypes that can be browsed by client|
+| vlc.allowedFilePaths | String[] | Contains list of allowed paths that can browsed by client ( currently Android client supports only one path) |
+| vlc.allowedFileTypes | String[] | Contains list of allowed filetypes that can be browsed by client|
+| vlc.commandlineArguments | String[] | Contains list of extra arguments that you want to use. E.g. --fullscreen|
+
+
+## Security
+
+There is option for using 128-bit AES (CFB) encryption. Enable this by setting secret key in [config](##Config).
+
+### Receiving data from server
+Encrypted messages are encoded in Base64 and send as byte array.
+<br />
+After Base64 decode the first 16 bytes contains the IV.
+<br />
+After decrypting the message, you find that the padding is done with '0'. character
+
+### Sending data do server
+When sending data to server send it as byte data since plain text is interpreted as unencrypted.
+<br />
+Message needs to be Base64 encoded. Base64 decoded messages first 16 bytes needs to contain the IV.
+<br />
+Decrypted message padding needs to be done using '0' character
+
 
 ## Websocket API
 
