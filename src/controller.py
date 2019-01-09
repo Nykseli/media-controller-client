@@ -10,6 +10,7 @@ import interface
 import interface.audio
 import interface.config
 import interface.general
+import interface.keyboard
 import interface.mouse
 import interface.vlc
 
@@ -60,7 +61,16 @@ def keyboadParser(request_json):
     additionalInfo = None
     if 'additionalInfo' in request_json:
         additionalInfo = request_json ['additionalInfo']
-    # TODO: implement keyboard interface
+
+    if(request_json['command'] == 'inputString'):
+        message = interface.keyboard.inputString(additionalInfo['input'])
+    elif(request_json['command'] == 'pressEnter'):
+        message = interface.keyboard.pressEnter()
+    elif(request_json['command'] == 'pressTab'):
+        message = interface.keyboard.pressTab()
+    elif(request_json['command'] == 'pressBackSpace'):
+        message = interface.keyboard.pressBackSpace()
+
     return message
 
 def mouseParser(request_json):

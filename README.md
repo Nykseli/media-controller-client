@@ -69,8 +69,10 @@ Interfaces are as follows:
   * Used to get configuration from server
 * general
   * Used to control system settings e.g. volume, mouse and keyboard input, etc
+* keyboad
+  * Used to simulate keyboad inputs. Supports utf-8
 * mouse
-  * Used to emulate mouse functionality. e.g. movement and clicks
+  * Used to simulate mouse functionality. e.g. movement and clicks
 
 * vlc
   * Used to control Vlc mediaplayer
@@ -86,6 +88,10 @@ Currently following commands are implemented
 | audio | muteMasterVolume | - | Mute system volume |
 | config  | getConfig | - | Get config.json contents. <br /> Response format: ```{"config": <object from config.json>```
 | general | getFilesAndFolders | "absolutePath": string | Get files and folders in ***absolutePath***. <br /> Response format: ```{"files": string[], "folders": string[], "currentPath": absolutePath}```|
+| keyboad | inputString | "input": string | Input string where the cursor currently is. String can contain utf-8 characters |
+| keyboad | pressEnter | - | Simulate enter keypress |
+| keyboad | pressTab | - | Simulate tab keypress |
+| keyboad | pressBackSpace | - | Simulate BackSpace keypress |
 | mouse | moveMouseX | "amount": int | Moves mouse on x axis by x amount that is defined by ***amount***. ***amount*** can be negative. |
 | mouse | moveMouseY | "amount": int | Moves mouse on y axis by x amount that is defined by ***amount***. ***amount*** can be negative. |
 | mouse | leftMouseClick | - | Click with left mouse button |
@@ -95,4 +101,6 @@ Currently following commands are implemented
 | vlc | increaseVolume | - | Increace Vlc volume by one step (5%) |
 | vlc | decreaseVolume | - | Decreace Vlc volume by one step (5%) |
 | vlc | muteVolume | - | Toggle Vlc mute on/off |
+| vlc | fastForward | - | Fast forward 10 seconds |
+| vlc | rewind | - | Rewind 10 secods |
 | vlc | getCurrentlyPlaying | - | Get title of currently playing file. <br/> Response format: ```{"interface": "vlc", "messageData": {"currentlyPlaying": string }}```. <br /> ***currentlyPlaying*** is empty if medialist is empty. |

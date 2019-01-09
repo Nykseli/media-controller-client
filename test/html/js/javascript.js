@@ -81,3 +81,18 @@ function fastForward(){
 function rewind(){
     sock.send(commandBuilder("vlc", "rewind"));
 }
+
+const ALL_ASCII_CHARS = ' !"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~';
+function inputString(message){
+    sock.send(commandBuilder("keyboard", 'inputString', {'input': message}));
+}
+function pressEnter(){
+    sock.send(commandBuilder("keyboard", 'pressEnter'));
+}
+
+function pressTab(){
+    sock.send(commandBuilder("keyboard", 'pressTab'));
+}
+function pressBackSpace(){
+    sock.send(commandBuilder("keyboard", 'pressBackSpace'));
+}
