@@ -106,6 +106,12 @@ def vlcParser(request_json):
         message = interface.vlc.muteVolume()
     elif(request_json['command'] == 'playFile'):
         message = interface.vlc.playFile(additionalInfo['absolutePath'])
+    elif(request_json['command'] == 'playFiles'):
+        message = interface.vlc.playFiles(additionalInfo['absolutePaths'])
+    elif(request_json['command'] == 'playNextMedia'):
+        message = interface.vlc.playNextMedia()
+    elif(request_json['command'] == 'playPreviousMedia'):
+        message = interface.vlc.playPreviousMedia()
     elif(request_json['command'] == 'pauseFile'):
         message = interface.vlc.pauseFile()
     elif(request_json['command'] == 'fastForward'):

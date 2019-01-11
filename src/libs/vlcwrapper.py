@@ -20,6 +20,12 @@ class VlcWrapper():
     PLAY_MEDIA = "play"
     # Add media to playlist
     ADD_TO_PLAYLIST = "add"
+    # Enqueue media to playlist
+    ENQUEUE_TO_PLAYLIST = "enqueue"
+    # Play next item in medialist
+    PLAY_NEXT_MEDIA = "next"
+    # Play previous item in medialist
+    PLAY_PREVIOUS_MEDIA = "prev"
     # Clear player playlist
     CLEAR_PLAYLIST = "clear"
     # Set vlc player volume to 0
@@ -131,6 +137,14 @@ class VlcWrapper():
         self.addToPlaylist(absolutePath)
         self.sendVlcCommand(self.PLAY_MEDIA)
 
+    def playFiles(self, paths):
+        ''' Clear playlist, add new items from path array to playlist and play them. '''
+        self.clearPlaylist()
+        for file in paths:
+            #print(file)
+            self.enqueueToPlaylist(file)
+        self.sendVlcCommand(self.PLAY_MEDIA)
+
     def pauseFile(self):
         ''' Toggle pause on/off '''
         self.sendVlcCommand(self.PAUSE_FILE)
@@ -160,8 +174,21 @@ class VlcWrapper():
         command = "{} {}".format(self.ADD_TO_PLAYLIST, path)
         self.sendVlcCommand(command)
 
+    def enqueueToPlaylist(self, path):
+        '''Enqueue item to playlist path should be absolute path'''
+        command = "{} {}".format(self.ENQUEUE_TO_PLAYLIST, path)
+        self.sendVlcCommand(command)
+
     def clearPlaylist(self):
         self.sendVlcCommand(self.CLEAR_PLAYLIST)
+
+    def playPreviousMedia(self):
+        ''' Play previous media in medialist '''
+        self.sendVlcCommand(self.PLAY_PREVIOUS_MEDIA)
+
+    def playNextMedia(self):
+        ''' Play next media in medialist '''
+        self.sendVlcCommand(self.PLAY_NEXT_MEDIA)
 
     def closePlayer(self):
         ''' Close vlc process and set self.vlcProsess to None '''

@@ -56,6 +56,18 @@ function playFile(filePath){
     sock.send(commandBuilder("vlc", "playFile", {"absolutePath": filePath}));
 }
 
+function playFiles(filePath){
+    sock.send(commandBuilder("vlc", "playFiles", {"absolutePaths": filePath}));
+}
+
+function playNext(filePath){
+    sock.send(commandBuilder("vlc", "playNextMedia"));
+}
+
+function playPrev(filePath){
+    sock.send(commandBuilder("vlc", "playPreviousMedia"));
+}
+
 function getCurrentlyPlaying(filePath){
     sock.send(commandBuilder("vlc", "getCurrentlyPlaying", {"absolutePath": filePath}));
 }

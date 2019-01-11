@@ -43,6 +43,30 @@ def playFile(absolutePath):
 
     return __VLC_PLAYER.playFile(absolutePath)
 
+def playFiles(absolutePaths):
+    '''Call VlcWrapper playFiles function'''
+
+    if not __isVlcUsable():
+        return __ERROR_MESSGE
+
+    return __VLC_PLAYER.playFiles(absolutePaths)
+
+def playNextMedia():
+    '''Call VlcWrapper playNextMedia function'''
+
+    if not __isVlcUsable():
+        return __ERROR_MESSGE
+
+    return __VLC_PLAYER.playNextMedia()
+
+def playPreviousMedia():
+    '''Call VlcWrapper playPreviousMedia function'''
+
+    if not __isVlcUsable():
+        return __ERROR_MESSGE
+
+    return __VLC_PLAYER.playPreviousMedia()
+
 def pauseFile():
     '''Call VlcWrapper pauseFile function'''
     if not __isVlcUsable():
