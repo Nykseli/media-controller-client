@@ -147,6 +147,7 @@ class XDoTool():
         return commands.osSystemHanlder(command_string, errors.XDOTOOL_GENERAL)
 
     def moveMouseX(self, pixel_amount):
+        ''' Move cursor on x axis by pixel_amount. Positive is right, negative is left '''
         if not pixel_amount:
             pixel_amount = 0
         else:
@@ -159,6 +160,7 @@ class XDoTool():
         return commands.osSystemHanlder(command_string, errors.XDOTOOL_GENERAL)
 
     def moveMouseY(self, pixel_amount):
+        ''' Move cursor on y axis by pixel_amount. Positive amount is down, negative is up '''
         if not pixel_amount:
             pixel_amount = 0
         else:
@@ -172,6 +174,7 @@ class XDoTool():
 
 
     def leftMouseClick(self):
+        ''' Simulate left mouse click'''
         command_string = "xdotool click 1"
         return commands.osSystemHanlder(command_string, errors.XDOTOOL_GENERAL)
 
@@ -180,7 +183,7 @@ class XDoTool():
 
         # Get int value of character
         charVal = ord(char)
-        print(str(charVal == 10))
+
         # If character is not ascii
         if charVal > 127:
             return self.__charToUnicodeCodePoint(char)
@@ -299,17 +302,11 @@ class XDoTool():
         return commands.osSystemHanlder(commandString, errors.XDOTOOL_GENERAL)
 
     def inputSingleSymbol(self, symbol):
-        import time
-        time.sleep(3)
-
         ''' Simulate input with symbol that xdotool understands '''
         commandString = "xdotool key --clearmodifiers {}".format(symbol)
         return commands.osSystemHanlder(commandString, errors.XDOTOOL_GENERAL)
 
     def inputString(self, inputString: str):
-        import time
-        time.sleep(3)
-
         ''' Input string to device with simulating keyboard input'''
         for c in inputString:
             result = self.inputSingleChar(c)

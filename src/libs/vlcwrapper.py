@@ -180,6 +180,7 @@ class VlcWrapper():
         self.sendVlcCommand(command)
 
     def clearPlaylist(self):
+        ''' Clear all the medias from current vlc medialist '''
         self.sendVlcCommand(self.CLEAR_PLAYLIST)
 
     def playPreviousMedia(self):

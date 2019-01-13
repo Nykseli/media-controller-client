@@ -98,6 +98,9 @@ Currently following commands are implemented
 | mouse | setMousePosition | "x": int,  <br />"y": int | Set mouse position to ***x***,***y*** coordinate |
 | vlc | pauseFile | - | Toggle vlc pause on/off |
 | vlc | playFile | "absolutePath": string | Play file defined by ***absolutePath***|
+| vlc | playFiles | "absolutePaths": string[] | Add files in ***absolutePaths*** list to vlc medialist and play them|
+| vlc | playNextMedia | - | Play next media in vlc medialist|
+| vlc | playPreviousMedia | - | Play previous media in vlc medialist|
 | vlc | increaseVolume | - | Increace Vlc volume by one step (5%) |
 | vlc | decreaseVolume | - | Decreace Vlc volume by one step (5%) |
 | vlc | muteVolume | - | Toggle Vlc mute on/off |

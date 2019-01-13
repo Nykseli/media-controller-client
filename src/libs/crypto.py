@@ -37,6 +37,7 @@ def cryptMessageCFB(key, messageString):
     chipher = AES.new(key, AES.MODE_CFB, iv, segment_size=128)
     messageString = __addPadding(messageString)
     msg = chipher.encrypt(messageString)
+    # Add iv to start of the message so its easy to find
     msg = base64.b64encode(iv + msg)
     return msg
 
@@ -44,8 +45,10 @@ def cryptMessageCFB(key, messageString):
 def decryptMessageCFB(key, cryptMessage):
     ''' Decrypt message and remove iv and padding '''
     cryptMessage = base64.b64decode(cryptMessage)
+    # IV is the first 16 bytes of the message
     iv = cryptMessage[:IV_LENGTH]
     dechiper = AES.new(key, AES.MODE_CFB, iv, segment_size=128)
+    # The crypted message is After the 16 bytes
     msg = dechiper.decrypt(cryptMessage[IV_LENGTH:])
     msg = __removePadding(msg)
     return msg

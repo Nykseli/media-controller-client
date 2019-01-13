@@ -20,4 +20,11 @@ def error(error) -> dict:
 
 
 def printError(error):
+    #TODO: use this to print messages to stdout/stderr
+    # so user can can easily understand the errors
+    pass
+
+def printInfo(info):
+    #TODO: use this to print info to stdout/stderr
+    # so user can see info that helps them to set up the client e.g. server ip
     pass

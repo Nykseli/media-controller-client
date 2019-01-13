@@ -23,6 +23,10 @@ class ConfigManager():
 
 
     def loadConfig(self) -> dict:
+        '''
+        Load almost the whole config.
+        This returns dict that contains all the config data that we want to send to client
+        '''
         if self.configPath:
             with open(self.configPath) as jsonFile:
                 self.config = json.loads(jsonFile.read())
@@ -41,9 +45,11 @@ class ConfigManager():
             pass
 
     def loadVlcConfig(self) -> dict:
+        ''' Load only the vlc part of the config '''
         if self.config and self.config['vlc']:
             return self.config['vlc']
 
     def loadCryptoConfig(self) -> dict:
+        ''' Load only the crypto part of the config '''
         if self.config and 'crypto' in self.config:
             return self.config['crypto']

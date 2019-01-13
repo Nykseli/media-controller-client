@@ -25,6 +25,10 @@ class FileManager():
         return files
 
     def isFileTypeAllowed(self, fileName):
+        '''
+        Filted files according to config.json.
+        The config is vlc.allowedFileTypes
+        '''
         # If there is no vlc config at all. We can allow all filetypes
         if not VLC_CONFIG:
             return True
@@ -41,7 +45,10 @@ class FileManager():
 
 
     def getFilesAndFolders(self, absolutePath) -> dict:
-
+        '''
+        Get all files and folders form absolutepath in alphabetical order.
+        Filter files according to config.json. Logic in isFileTypeAllowed
+        '''
         if not os.path.isdir(absolutePath):
             return errors.error(errors.FILE_NOT_FOUND)
 
