@@ -42,6 +42,10 @@ class VlcWrapper():
     ## List of hotkeys can be found https://wiki.videolan.org/Hotkeys_table
     # Toggle mute on/off
     HOTKEY_VOLUME_MUTE = "hotkey key-vol-mute"
+    # Increase Volume by 5%
+    HOTKEY_VOLUME_INCREASE = "hotkey key-vol-up"
+    # Increase Volume by 5%
+    HOTKEY_VOLUME_DECREASE = "hotkey key-vol-down"
     # Fastforward 10 secods
     HOTKEY_FAST_FORWARD = "hotkey key-jump+short"
     # Rewind 10 secods
@@ -159,11 +163,11 @@ class VlcWrapper():
 
     def increaseVolume(self):
         ''' Increase Vlc player volume doesn't affect system volume '''
-        self.sendVlcCommand(self.INCREACE_VOLUME)
+        self.sendVlcCommand(self.HOTKEY_VOLUME_INCREASE)
 
     def decreaseVolume(self):
         ''' Decrease Vlc player volume doesn't affect system volume '''
-        self.sendVlcCommand(self.DECREACE_VOLUME)
+        self.sendVlcCommand(self.HOTKEY_VOLUME_DECREASE)
 
     def muteVolume(self):
         ''' Mute Vlc player volume doesn't affect system volume '''
