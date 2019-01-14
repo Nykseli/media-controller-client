@@ -2,7 +2,7 @@
 
 from autobahn.twisted.websocket import WebSocketServerProtocol, \
     WebSocketServerFactory
-from libs import CRYPTO_CONFIG
+from libs import CRYPTO_CONFIG, WEBSOCKET_CONFIG
 import libs.crypto
 
 # interfaces should be only imported in contoller.py
@@ -18,6 +18,9 @@ import json
 import time
 
 
+CRYPTO_SECRET_KEY = None
+if CRYPTO_CONFIG:
+    CRYPTO_SECRET_KEY = CRYPTO_CONFIG['secretKey']
 
 def audioParser(request_json):
     ''' Parse request_json to use requested audio interface function'''
@@ -210,13 +213,16 @@ if __name__ == '__main__':
 
     log.startLogging(sys.stdout)
 
-    factory = WebSocketServerFactory(u"ws://127.0.0.1:9000")
+    WEBSOCKET_PORT = 9000
+    if WEBSOCKET_CONFIG and 'port' in WEBSOCKET_CONFIG:
+        WEBSOCKET_PORT = WEBSOCKET_CONFIG['port']
+
+    factory = WebSocketServerFactory(u"ws://127.0.0.1:{}".format(WEBSOCKET_PORT))
     factory.protocol = MyServerProtocol
     # factory.setProtocolOptions(maxConnections=2)
 
-    CRYPTO_SECRET_KEY = None
-    if CRYPTO_CONFIG:
-        CRYPTO_SECRET_KEY = CRYPTO_CONFIG['secretKey']
+    if WEBSOCKET_CONFIG and 'allowedOrigins' in WEBSOCKET_CONFIG:
+        factory.setProtocolOptions(allowedOrigins=WEBSOCKET_CONFIG['allowedOrigins'])
 
-    reactor.listenTCP(9000, factory)
+    reactor.listenTCP(WEBSOCKET_PORT, factory)
     reactor.run()

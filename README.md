@@ -24,11 +24,14 @@ You can put the [config.json](https://github.com/Nykseli/media-controller-server
 | vlc.allowedFilePaths | String[] | Contains list of allowed paths that can browsed by client ( currently Android client supports only one path) |
 | vlc.allowedFileTypes | String[] | Contains list of allowed filetypes that can be browsed by client|
 | vlc.commandlineArguments | String[] | Contains list of extra arguments that you want to use. E.g. --fullscreen|
+| websocket | Object | Contains web socket settings |
+| websocket.allowedOrigins | string[] | Define what origins are allowed to connect |
+| websocket.port | int | Define what port websocket listens |
 
 
 ## Security
 
-There is option for using 128-bit AES (CFB) encryption. Enable this by setting secret key in [config](##Config).
+There is option for using 128-bit AES (CFB) encryption. Enable this by setting secret key in [config](#Config).
 
 ### Receiving data from server
 Encrypted messages are encoded in Base64 and send as byte array.

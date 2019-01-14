@@ -39,6 +39,10 @@ class ConfigManager():
             if 'crypto' in config:
                 del config['crypto']
 
+            # Remove websocet for the same reason as crypto
+            if 'websocket' in config:
+                del config['websocket']
+
             return config
         else:
             return errors.error(errors.CONFIG_NOT_FOUND)
@@ -53,3 +57,8 @@ class ConfigManager():
         ''' Load only the crypto part of the config '''
         if self.config and 'crypto' in self.config:
             return self.config['crypto']
+
+    def loadWebSocketConfig(self) -> dict:
+        ''' Load only the web socket part of the config '''
+        if self.config and 'websocket' in self.config:
+            return self.config['websocket']

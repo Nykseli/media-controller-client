@@ -1,4 +1,7 @@
 {
+    "crypto": {
+        "secretKey": "1234567890123456"
+    },
     "vlc":{
         "allowedFilePaths": [
             "~/Documents"
@@ -10,6 +13,13 @@
         "commandlineArguments": [
             "--fullscreen"
         ]
+    },
+    "websocket": {
+        "allowedOrigins": [
+            "*localhost*",
+            "wss://192.168.0.*",
+        ],
+        "port": 9000
     }
 
 }
