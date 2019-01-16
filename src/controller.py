@@ -1,9 +1,13 @@
 #!/usr/bin/python3
 
+import errors
+errors.printInfo("Server starting... ")
+
 from autobahn.twisted.websocket import WebSocketServerProtocol, \
     WebSocketServerFactory
 from libs import CRYPTO_CONFIG, WEBSOCKET_CONFIG
 import libs.crypto
+import libs.deviceinfo
 
 # interfaces should be only imported in contoller.py
 import interface
@@ -211,7 +215,7 @@ if __name__ == '__main__':
     from twisted.python import log
     from twisted.internet import reactor
 
-    log.startLogging(sys.stdout)
+    #log.startLogging(sys.stdout)
 
     WEBSOCKET_PORT = 9000
     if WEBSOCKET_CONFIG and 'port' in WEBSOCKET_CONFIG:
@@ -223,6 +227,9 @@ if __name__ == '__main__':
 
     if WEBSOCKET_CONFIG and 'allowedOrigins' in WEBSOCKET_CONFIG:
         factory.setProtocolOptions(allowedOrigins=WEBSOCKET_CONFIG['allowedOrigins'])
+
+    localIp = libs.deviceinfo.getLocalIp()
+    errors.printInfo("Server running... Connect to ws://{}:{}".format(localIp, WEBSOCKET_PORT))
 
     reactor.listenTCP(WEBSOCKET_PORT, factory)
     reactor.run()

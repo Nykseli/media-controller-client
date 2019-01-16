@@ -2,6 +2,7 @@ from subprocess import Popen, check_output, PIPE
 from libs import VLC_CONFIG
 import os
 import errno
+import errors
 #import fcntl
 import signal
 import socket
@@ -93,6 +94,8 @@ class VlcWrapper():
         # connect_ex returns 0 if connection was succesful
         while self.SOCK.connect_ex((self.SOCKET_HOST, self.SOCKET_PORT)) != 0:
             time.sleep(0.1)
+
+        errors.printInfo("Vlc player started!")
 
         # Set socket time out so it waits a while to make sure data is written to buffer
         # This also prevents reading from buffer from blocking

@@ -25,6 +25,8 @@ def printError(error):
     pass
 
 def printInfo(info):
+    ''' Print info to stdout '''
     #TODO: use this to print info to stdout/stderr
     # so user can see info that helps them to set up the client e.g. server ip
+    print(str(info))
     pass
