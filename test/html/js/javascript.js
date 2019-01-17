@@ -93,6 +93,12 @@ function fastForward(){
 function rewind(){
     sock.send(commandBuilder("vlc", "rewind"));
 }
+function cycleAudioTrack(){
+    sock.send(commandBuilder("vlc", "cycleAudioTrack"));
+}
+function cycleSubtitleTrack(){
+    sock.send(commandBuilder("vlc", "cycleSubtitleTrack"));
+}
 
 const ALL_ASCII_CHARS = ' !"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~';
 function inputString(message){

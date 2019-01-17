@@ -119,6 +119,10 @@ def vlcParser(request_json):
         message = interface.vlc.playNextMedia()
     elif(request_json['command'] == 'playPreviousMedia'):
         message = interface.vlc.playPreviousMedia()
+    elif(request_json['command'] == 'cycleAudioTrack'):
+        message = interface.vlc.cycleAudioTrack()
+    elif(request_json['command'] == 'cycleSubtitleTrack'):
+        message = interface.vlc.cycleSubtitleTrack()
     elif(request_json['command'] == 'pauseFile'):
         message = interface.vlc.pauseFile()
     elif(request_json['command'] == 'fastForward'):

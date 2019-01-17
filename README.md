@@ -109,4 +109,6 @@ Currently following commands are implemented
 | vlc | muteVolume | - | Toggle Vlc mute on/off |
 | vlc | fastForward | - | Fast forward 10 seconds |
 | vlc | rewind | - | Rewind 10 secods |
+| vlc | cycleAudioTrack | - | Cycle through audio tracks |
+| vlc | cycleSubtitleTrack | - | Cycle through subtitle tracks |
 | vlc | getCurrentlyPlaying | - | Get title of currently playing file. <br/> Response format: ```{"interface": "vlc", "messageData": {"currentlyPlaying": string }}```. <br /> ***currentlyPlaying*** is empty if medialist is empty. |

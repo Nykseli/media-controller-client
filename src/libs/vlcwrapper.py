@@ -51,6 +51,10 @@ class VlcWrapper():
     HOTKEY_FAST_FORWARD = "hotkey key-jump+short"
     # Rewind 10 secods
     HOTKEY_FAST_REWIND = "hotkey key-jump-short"
+    # Cycle audio track
+    HOTKEY_CYCLE_AUDIO = "hotkey key-audio-track"
+    # Cycle subltitle track
+    HOTKEY_CYCLE_SUBTITLE = "hotkey key-subtitle-track"
 
     ### Default socket variables ###
     # Default socket host. TODO: make this configurable in config.json
@@ -189,6 +193,14 @@ class VlcWrapper():
     def clearPlaylist(self):
         ''' Clear all the medias from current vlc medialist '''
         self.sendVlcCommand(self.CLEAR_PLAYLIST)
+
+    def cycleAudioTrack(self):
+        ''' Cycle through audio tracks '''
+        self.sendVlcCommand(self.HOTKEY_CYCLE_AUDIO)
+
+    def cycleSubtitleTrack(self):
+        ''' Cycle through subtitle tracks '''
+        self.sendVlcCommand(self.HOTKEY_CYCLE_SUBTITLE)
 
     def playPreviousMedia(self):
         ''' Play previous media in medialist '''

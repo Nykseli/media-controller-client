@@ -35,6 +35,20 @@ def muteVolume():
 
     return __VLC_PLAYER.muteVolume()
 
+def cycleAudioTrack():
+    '''Call VlcWrapper cycleAudioTrack function'''
+    if not __isVlcUsable():
+        return __ERROR_MESSGE
+
+    return __VLC_PLAYER.cycleAudioTrack()
+
+def cycleSubtitleTrack():
+    '''Call VlcWrapper cycleSubtitleTrack function'''
+    if not __isVlcUsable():
+        return __ERROR_MESSGE
+
+    return __VLC_PLAYER.cycleSubtitleTrack()
+
 def playFile(absolutePath):
     '''Call VlcWrapper playFile function'''
 
