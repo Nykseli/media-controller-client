@@ -62,7 +62,7 @@ def generalParser(request_json):
 
     return message
 
-def keyboadParser(request_json):
+def keyboardParser(request_json):
     ''' Parse request_json to use requested keyboard interface function'''
     message = None
     additionalInfo = None
@@ -144,7 +144,7 @@ def requestParser(request_json):
     elif(request_json['interface'] == interface.GENERAL_INTERFACE):
         message = generalParser(request_json)
     elif(request_json['interface'] == interface.KEYBOARD_INTERFACE):
-        message = keyboadParser(request_json)
+        message = keyboardParser(request_json)
     elif(request_json['interface'] == interface.MOUSE_INTERFACE):
         message = mouseParser(request_json)
     elif(request_json['interface'] == interface.VLC_INTERFACE):
