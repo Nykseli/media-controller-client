@@ -41,6 +41,36 @@ def pressBackSpace():
 
     __X_DO_TOOL.inputSingleSymbol(__X_DO_TOOL.SYM_BACKSPACE)
 
+def pressArrowUp():
+    ''' Simulate back space keyboard input '''
+    if not __isKeyboardUsable():
+        return __ERROR_MESSGE
+
+    __X_DO_TOOL.inputSingleSymbol(__X_DO_TOOL.SYM_ARROW_UP)
+
+def pressArrowRight():
+    ''' Simulate back space keyboard input '''
+    if not __isKeyboardUsable():
+        return __ERROR_MESSGE
+
+    __X_DO_TOOL.inputSingleSymbol(__X_DO_TOOL.SYM_ARROW_RIGHT)
+
+
+def pressArrowDown():
+    ''' Simulate back space keyboard input '''
+    if not __isKeyboardUsable():
+        return __ERROR_MESSGE
+
+    __X_DO_TOOL.inputSingleSymbol(__X_DO_TOOL.SYM_ARROW_DOWN)
+
+
+def pressArrowLeft():
+    ''' Simulate back space keyboard input '''
+    if not __isKeyboardUsable():
+        return __ERROR_MESSGE
+
+    __X_DO_TOOL.inputSingleSymbol(__X_DO_TOOL.SYM_ARROW_LEFT)
+
 if __name__ == 'interface.keyboard':
     # XDoTool needs to be initialized when mouse interface is imported
     __X_DO_TOOL = XDoTool()

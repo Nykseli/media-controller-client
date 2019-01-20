@@ -95,6 +95,10 @@ Currently following commands are implemented
 | keyboard | pressEnter | - | Simulate enter keypress |
 | keyboard | pressTab | - | Simulate tab keypress |
 | keyboard | pressBackSpace | - | Simulate BackSpace keypress |
+| keyboard | pressArrowUp | - | Simulate Arrow Up keypress |
+| keyboard | pressArrowRight | - | Simulate Arrow Right keypress |
+| keyboard | pressArrowDown | - | Simulate Arrow Down keypress |
+| keyboard | pressArrowLeft | - | Simulate Arrow Left keypress |
 | mouse | moveMouseX | "amount": int | Moves mouse on x axis by x amount that is defined by ***amount***. ***amount*** can be negative. |
 | mouse | moveMouseY | "amount": int | Moves mouse on y axis by x amount that is defined by ***amount***. ***amount*** can be negative. |
 | mouse | leftMouseClick | - | Click with left mouse button |

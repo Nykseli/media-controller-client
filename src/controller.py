@@ -77,6 +77,14 @@ def keyboardParser(request_json):
         message = interface.keyboard.pressTab()
     elif(request_json['command'] == 'pressBackSpace'):
         message = interface.keyboard.pressBackSpace()
+    elif(request_json['command'] == 'pressArrowUp'):
+        message = interface.keyboard.pressArrowUp()
+    elif(request_json['command'] == 'pressArrowRight'):
+        message = interface.keyboard.pressArrowRight()
+    elif(request_json['command'] == 'pressArrowDown'):
+        message = interface.keyboard.pressArrowDown()
+    elif(request_json['command'] == 'pressArrowRight'):
+        message = interface.keyboard.pressArrowRight()
 
     return message
 

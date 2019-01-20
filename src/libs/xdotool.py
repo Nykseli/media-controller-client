@@ -118,6 +118,12 @@ class XDoTool():
     # Symbol for | character
     SYM_BAR = 'bar'
 
+    # Arrow keys
+    SYM_ARROW_UP = 'Up'
+    SYM_ARROW_RIGHT = 'Right'
+    SYM_ARROW_DOWN = 'Down'
+    SYM_ARROW_LEFT = 'Left'
+
     def __init__(self):
         self.getWindowSize = self.getWindowSize()
         pass
