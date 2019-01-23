@@ -1,3 +1,4 @@
+import interface
 from libs.audiomanager import AudioManager
 
 __AUDIO_MANAGER = None
@@ -15,22 +16,25 @@ def decreaseMasterVolume():
     if not __isAudioUsable():
         return __ERROR_MESSGE
 
-    return __AUDIO_MANAGER.decreaseMasterVolume()
+    __THREAD.addToQueue(__AUDIO_MANAGER.decreaseMasterVolume)
 
 def increaseMasterVolume():
     '''Call AudioManager increaseMasterVolume function'''
     if not __isAudioUsable():
         return __ERROR_MESSGE
 
-    return __AUDIO_MANAGER.increaseMasterVolume()
+    __THREAD.addToQueue(__AUDIO_MANAGER.increaseMasterVolume)
 
 def muteMasterVolume():
     '''Call AudioManager muteMasterVolume function'''
     if not __isAudioUsable():
         return __ERROR_MESSGE
 
-    return __AUDIO_MANAGER.muteMasterVolume()
+    __THREAD.addToQueue(__AUDIO_MANAGER.muteMasterVolume)
 
 if __name__ == 'interface.audio':
     # AudioManager needs to be initialized when mouse interface is imported
     __AUDIO_MANAGER = AudioManager()
+
+    __THREAD = interface._InterfaceThread(interface.VLC_INTERFACE)
+    __THREAD.start()

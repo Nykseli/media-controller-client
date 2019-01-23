@@ -1,5 +1,6 @@
 
 import errors
+import interface
 
 from libs.xdotool import XDoTool
 
@@ -18,42 +19,42 @@ def inputString(inputString):
     if not __isKeyboardUsable():
         return __ERROR_MESSGE
 
-    __X_DO_TOOL.inputString(inputString)
+    __THREAD.addToQueue(__X_DO_TOOL.inputString, (inputString, ))
 
 def pressEnter():
     ''' Simulate enter keyboard input '''
     if not __isKeyboardUsable():
         return __ERROR_MESSGE
 
-    __X_DO_TOOL.inputSingleSymbol(__X_DO_TOOL.SYM_ENTER)
+    __THREAD.addToQueue(__X_DO_TOOL.inputSingleSymbol, (__X_DO_TOOL.SYM_ENTER, ))
 
 def pressTab():
     ''' Simulate tab keyboard input '''
     if not __isKeyboardUsable():
         return __ERROR_MESSGE
 
-    __X_DO_TOOL.inputSingleSymbol(__X_DO_TOOL.SYM_TAB)
+    __THREAD.addToQueue(__X_DO_TOOL.inputSingleSymbol, (__X_DO_TOOL.SYM_TAB, ))
 
 def pressBackSpace():
     ''' Simulate back space keyboard input '''
     if not __isKeyboardUsable():
         return __ERROR_MESSGE
 
-    __X_DO_TOOL.inputSingleSymbol(__X_DO_TOOL.SYM_BACKSPACE)
+    __THREAD.addToQueue(__X_DO_TOOL.inputSingleSymbol, (__X_DO_TOOL.SYM_BACKSPACE, ))
 
 def pressArrowUp():
     ''' Simulate back space keyboard input '''
     if not __isKeyboardUsable():
         return __ERROR_MESSGE
 
-    __X_DO_TOOL.inputSingleSymbol(__X_DO_TOOL.SYM_ARROW_UP)
+    __THREAD.addToQueue(__X_DO_TOOL.inputSingleSymbol, (__X_DO_TOOL.SYM_ARROW_UP, ))
 
 def pressArrowRight():
     ''' Simulate back space keyboard input '''
     if not __isKeyboardUsable():
         return __ERROR_MESSGE
 
-    __X_DO_TOOL.inputSingleSymbol(__X_DO_TOOL.SYM_ARROW_RIGHT)
+    __THREAD.addToQueue(__X_DO_TOOL.inputSingleSymbol, (__X_DO_TOOL.SYM_ARROW_RIGHT, ))
 
 
 def pressArrowDown():
@@ -61,7 +62,7 @@ def pressArrowDown():
     if not __isKeyboardUsable():
         return __ERROR_MESSGE
 
-    __X_DO_TOOL.inputSingleSymbol(__X_DO_TOOL.SYM_ARROW_DOWN)
+    __THREAD.addToQueue(__X_DO_TOOL.inputSingleSymbol, (__X_DO_TOOL.SYM_ARROW_DOWN, ))
 
 
 def pressArrowLeft():
@@ -69,8 +70,11 @@ def pressArrowLeft():
     if not __isKeyboardUsable():
         return __ERROR_MESSGE
 
-    __X_DO_TOOL.inputSingleSymbol(__X_DO_TOOL.SYM_ARROW_LEFT)
+    __THREAD.addToQueue(__X_DO_TOOL.inputSingleSymbol, (__X_DO_TOOL.SYM_ARROW_LEFT, ))
 
 if __name__ == 'interface.keyboard':
     # XDoTool needs to be initialized when mouse interface is imported
     __X_DO_TOOL = XDoTool()
+
+    __THREAD = interface._InterfaceThread(interface.VLC_INTERFACE)
+    __THREAD.start()

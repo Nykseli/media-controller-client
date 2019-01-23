@@ -25,3 +25,6 @@ if __name__ == 'interface.config':
     # This means that vlc player should only be imported once
     __CONFIG = CONFIG
 
+    #TODO: implement interface._InterfaceThreading when config has functions
+    # that process something
+

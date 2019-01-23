@@ -1,6 +1,8 @@
 #!/usr/bin/python3
 
 import errors
+import signal
+import threading
 errors.printInfo("Server starting... ")
 
 from autobahn.twisted.websocket import WebSocketServerProtocol, \
@@ -220,6 +222,22 @@ class MyServerProtocol(WebSocketServerProtocol):
             reactor.callFromThread(cls.sendMessage, c, payload, True)
 
 
+class ProgramStopper:
+    ''' Listen SIGINT and SIGTERM signals and stop all threads and reactor object when signal recieved '''
+    def __init__(self):
+        signal.signal(signal.SIGINT, self.setKillThread)
+        signal.signal(signal.SIGTERM, self.setKillThread)
+
+    def setKillThread(self, signum, frame):
+        # Loop all threads and set kill value to kill
+        # Note that this only works if the thread class is implemented
+        # in such a way that it stops working when kill is set to True
+        for thread in threading.enumerate():
+            thread.kill = True
+
+        # Finally stop the reactor object that handles the web socket stuff
+        reactor.stop()
+
 if __name__ == '__main__':
 
     import sys
@@ -228,6 +246,8 @@ if __name__ == '__main__':
     from twisted.internet import reactor
 
     #log.startLogging(sys.stdout)
+
+    stopper = ProgramStopper()
 
     WEBSOCKET_PORT = 9000
     if WEBSOCKET_CONFIG and 'port' in WEBSOCKET_CONFIG:

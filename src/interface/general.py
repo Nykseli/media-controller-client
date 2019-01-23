@@ -1,3 +1,5 @@
+
+import interface
 from libs.filemanager import FileManager
 
 __FILE_MANAGER = None
@@ -15,8 +17,11 @@ def getFilesAndFolders(absolutePath):
     if not __isGeneralUsable():
         return __ERROR_MESSGE
 
-    return __FILE_MANAGER.getFilesAndFolders(absolutePath)
+    return __THREAD.callReturnFunction(__FILE_MANAGER.getFilesAndFolders, (absolutePath, ))
 
 if __name__ == 'interface.general':
     # FileManager needs to be initialized when mouse interface is imported
     __FILE_MANAGER = FileManager()
+
+    __THREAD = interface._InterfaceThread(interface.VLC_INTERFACE)
+    __THREAD.start()

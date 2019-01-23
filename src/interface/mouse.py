@@ -1,3 +1,4 @@
+import interface
 from libs.xdotool import XDoTool
 
 __X_DO_TOOL = None
@@ -15,7 +16,7 @@ def leftMouseClick():
     if not __isMouseUsable():
         return __ERROR_MESSGE
 
-    return __X_DO_TOOL.leftMouseClick()
+    __THREAD.addToQueue(__X_DO_TOOL.leftMouseClick)
 
 def moveMouseX(amount):
     '''Call XDoTool moveMouseX function'''
@@ -23,7 +24,7 @@ def moveMouseX(amount):
     if not __isMouseUsable():
         return __ERROR_MESSGE
 
-    return __X_DO_TOOL.moveMouseX(amount)
+    __THREAD.addToQueue(__X_DO_TOOL.moveMouseX, (amount, ))
 
 def moveMouseY(amount):
     '''Call XDoTool moveMouseY function'''
@@ -31,7 +32,7 @@ def moveMouseY(amount):
     if not __isMouseUsable():
         return __ERROR_MESSGE
 
-    return __X_DO_TOOL.moveMouseY(amount)
+    __THREAD.addToQueue(__X_DO_TOOL.moveMouseY, (amount, ))
 
 def setMousePosition(x, y):
     '''Call XDoTool setMousePosition function'''
@@ -39,9 +40,12 @@ def setMousePosition(x, y):
     if not __isMouseUsable():
         return __ERROR_MESSGE
 
-    return __X_DO_TOOL.setMousePosition(x, y)
+    __THREAD.addToQueue(__X_DO_TOOL.setMousePosition, (x, y))
 
 
 if __name__ == 'interface.mouse':
     # XDoTool needs to be initialized when mouse interface is imported
     __X_DO_TOOL = XDoTool()
+
+    __THREAD = interface._InterfaceThread(interface.MOUSE_INTERFACE)
+    __THREAD.start()
