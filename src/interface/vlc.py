@@ -55,7 +55,7 @@ def playFile(absolutePath):
     if not __isVlcUsable():
         return __ERROR_MESSGE
 
-    __THREAD.addToQueue(__VLC_PLAYER.pauseFile, (absolutePath, ))
+    __THREAD.addToQueue(__VLC_PLAYER.playFile, (absolutePath, ))
 
 def playFiles(absolutePaths):
     '''Call VlcWrapper playFiles function'''
