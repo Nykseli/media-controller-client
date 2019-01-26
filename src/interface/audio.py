@@ -36,5 +36,5 @@ if __name__ == 'interface.audio':
     # AudioManager needs to be initialized when mouse interface is imported
     __AUDIO_MANAGER = AudioManager()
 
-    __THREAD = interface._InterfaceThread(interface.VLC_INTERFACE)
+    __THREAD = interface._InterfaceThread(interface.AUDIO_INTERFACE)
     __THREAD.start()

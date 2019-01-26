@@ -76,5 +76,5 @@ if __name__ == 'interface.keyboard':
     # XDoTool needs to be initialized when mouse interface is imported
     __X_DO_TOOL = XDoTool()
 
-    __THREAD = interface._InterfaceThread(interface.VLC_INTERFACE)
+    __THREAD = interface._InterfaceThread(interface.KEYBOARD_INTERFACE)
     __THREAD.start()

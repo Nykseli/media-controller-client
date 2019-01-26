@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+import os
 import errors
 import signal
 import threading
@@ -225,6 +226,7 @@ class MyServerProtocol(WebSocketServerProtocol):
 class ProgramStopper:
     ''' Listen SIGINT and SIGTERM signals and stop all threads and reactor object when signal recieved '''
     def __init__(self):
+        os.setsid()
         signal.signal(signal.SIGINT, self.setKillThread)
         signal.signal(signal.SIGTERM, self.setKillThread)
 

@@ -23,5 +23,5 @@ if __name__ == 'interface.general':
     # FileManager needs to be initialized when mouse interface is imported
     __FILE_MANAGER = FileManager()
 
-    __THREAD = interface._InterfaceThread(interface.VLC_INTERFACE)
+    __THREAD = interface._InterfaceThread(interface.GENERAL_INTERFACE)
     __THREAD.start()

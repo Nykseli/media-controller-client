@@ -1,0 +1,60 @@
+#!/bin/bash
+### BEGIN INIT INFO
+# Provides:          media-controller
+# Required-Start:    $all
+# Required-Stop:
+# Default-Start:     2 3 4 5
+# Default-Stop:
+# Short-Description: Server for media-controller
+### END INIT INFO
+
+
+###
+# Define SRCPATH and CHUID and you are good to go
+##
+
+SRCPATH=
+CHUID=
+EXECSTR="/usr/bin/python3 src/controller.py"
+PIDFILE="/run/media-ctrl.pid"
+
+if [ ! `ls -l /dev/null &> /dev/null && echo 1` ]
+then
+    echo "Failed. No /dev/null found"
+    exit 1
+fi
+
+check_status () {
+    if ps -p `cat "$PIDFILE"` > /dev/null ;
+    then
+        echo "Controller is running"
+    else
+        echo "Controller is not running"
+    fi
+}
+
+case "$1" in
+    start)
+        if start-stop-daemon --start --chdir $SRCPATH --background --make-pidfile --chuid=$CHUID --pidfile $PIDFILE --exec $EXECSTR ;
+        then
+            echo "Media controller started"
+        else
+            echo "Media contorller start failed"
+        fi
+        ;;
+    stop)
+        if start-stop-daemon --stop --signal 15 --remove-pidfile --pidfile $PIDFILE ;
+        then
+            killall vlc &> /dev/null # Make sure that there are no orphan vlc processes left behind
+            echo "Media controller stopped"
+        else
+            echo "Media contorller stop failed"
+        fi
+        ;;
+
+    status)
+	    check_status
+    ;;
+esac
+
+exit 0

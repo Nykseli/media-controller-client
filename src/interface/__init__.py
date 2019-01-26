@@ -26,6 +26,7 @@ class _InterfaceThread(threading.Thread):
 
     def __init__(self, interFaceName):
         super(_InterfaceThread, self).__init__()
+        self.setDaemon(True)
         self.name = interFaceName + "_thread"
         self.queue = queue.Queue()
         self.kill = False
