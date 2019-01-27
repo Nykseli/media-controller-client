@@ -20,6 +20,8 @@ You can put the [config.json](https://github.com/Nykseli/media-controller-server
 |-----| -----| ------      |
 | crypto | Object | Contains config of the security settings|
 | crypto.secretKey | String | Ascii string with length of 16 that is used to encrypt and decrypt messages |
+| general | Object | Contains config of the general program settings|
+| general.display | String | DISPLAY enviroment variable user by X11. Needs to be set if program is used as a daemon |
 | vlc |Object| Contains vlc configs|
 | vlc.allowedFilePaths | String[] | Contains list of allowed paths that can browsed by client ( currently Android client supports only one path) |
 | vlc.allowedFileTypes | String[] | Contains list of allowed filetypes that can be browsed by client|

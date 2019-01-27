@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import os
+import time
 import subprocess
 
 import errors
@@ -302,9 +303,7 @@ class XDoTool():
     def inputSingleChar(self, c):
         '''Change char to a value that xdotool understand and simulate input with it'''
         symbol = self.__charToXdotoolSymbol(c)
-        print(str(symbol))
         commandString = "xdotool key --clearmodifiers {}".format(symbol)
-        print(str(commandString))
         return commands.osSystemHanlder(commandString, errors.XDOTOOL_GENERAL)
 
     def inputSingleSymbol(self, symbol):
@@ -316,6 +315,7 @@ class XDoTool():
         ''' Input string to device with simulating keyboard input'''
         for c in inputString:
             result = self.inputSingleChar(c)
+            time.sleep(0.05) # Short sleep makes sure that the chars are typed in right order
             if result:
                 return result
 

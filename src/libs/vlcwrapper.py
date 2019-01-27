@@ -79,7 +79,7 @@ class VlcWrapper():
     def initVlcPlayer(self):
         '''Start Vlc process with rc module and connect socket to it'''
         self.__killOldVlcProsess()
-        self.vlcProcess = Popen(self.__getCommandList(), stdout=PIPE)
+        self.vlcProcess = Popen(self.__getCommandList(), env=os.environ.copy(), stdout=PIPE)
         # Excecute __initSocketConnection on thread so it doesn't block
         # other functionality if there is a problem with connecting
         threading.Thread(target=self.__initSocketConnection).start()

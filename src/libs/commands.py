@@ -1,9 +1,10 @@
 import os
 import errors
+import subprocess
 
 def osSystemHanlder(command, errorName) -> dict:
     try:
-        os.system(command)
+        subprocess.Popen(command, shell=True, env=os.environ.copy())
     except Exception:
         return errors.error(errorName);
         pass

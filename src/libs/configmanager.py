@@ -62,3 +62,8 @@ class ConfigManager():
         ''' Load only the web socket part of the config '''
         if self.config and 'websocket' in self.config:
             return self.config['websocket']
+
+    def loadGeneralConfig(self) -> dict:
+        ''' Load only the general part of the config '''
+        if self.config and 'general' in self.config:
+            return self.config['general']

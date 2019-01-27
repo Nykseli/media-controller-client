@@ -8,9 +8,13 @@ errors.printInfo("Server starting... ")
 
 from autobahn.twisted.websocket import WebSocketServerProtocol, \
     WebSocketServerFactory
-from libs import CRYPTO_CONFIG, WEBSOCKET_CONFIG
+from libs import CRYPTO_CONFIG, GENERAL_CONFIG, WEBSOCKET_CONFIG
 import libs.crypto
 import libs.deviceinfo
+
+# Set display envrion so interfaces have the right DISPLAY
+if GENERAL_CONFIG and 'display' in GENERAL_CONFIG:
+    os.environ['DISPLAY'] = GENERAL_CONFIG['display']
 
 # interfaces should be only imported in contoller.py
 import interface
@@ -226,7 +230,7 @@ class MyServerProtocol(WebSocketServerProtocol):
 class ProgramStopper:
     ''' Listen SIGINT and SIGTERM signals and stop all threads and reactor object when signal recieved '''
     def __init__(self):
-        os.setsid()
+        #os.setsid()
         signal.signal(signal.SIGINT, self.setKillThread)
         signal.signal(signal.SIGTERM, self.setKillThread)
 
