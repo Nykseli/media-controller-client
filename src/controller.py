@@ -130,6 +130,8 @@ def vlcParser(request_json):
         message = interface.vlc.playFile(additionalInfo['absolutePath'])
     elif(request_json['command'] == 'playFiles'):
         message = interface.vlc.playFiles(additionalInfo['absolutePaths'])
+    elif(request_json['command'] == 'stopMedia'):
+        message = interface.vlc.stopMedia()
     elif(request_json['command'] == 'playNextMedia'):
         message = interface.vlc.playNextMedia()
     elif(request_json['command'] == 'playPreviousMedia'):

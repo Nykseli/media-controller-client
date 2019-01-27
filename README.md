@@ -110,6 +110,7 @@ Currently following commands are implemented
 | vlc | playFiles | "absolutePaths": string[] | Add files in ***absolutePaths*** list to vlc medialist and play them|
 | vlc | playNextMedia | - | Play next media in vlc medialist|
 | vlc | playPreviousMedia | - | Play previous media in vlc medialist|
+| vlc | stopMedia | - | Stop current medialist |
 | vlc | increaseVolume | - | Increace Vlc volume by one step (5%) |
 | vlc | decreaseVolume | - | Decreace Vlc volume by one step (5%) |
 | vlc | muteVolume | - | Toggle Vlc mute on/off |

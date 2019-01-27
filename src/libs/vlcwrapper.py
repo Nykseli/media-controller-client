@@ -19,6 +19,8 @@ class VlcWrapper():
     PAUSE_FILE = "pause"
     # Play media stream
     PLAY_MEDIA = "play"
+    # Stop media stream
+    STOP_MEDIA = "stop"
     # Add media to playlist
     ADD_TO_PLAYLIST = "add"
     # Enqueue media to playlist
@@ -155,6 +157,10 @@ class VlcWrapper():
             #print(file)
             self.enqueueToPlaylist(file)
         self.sendVlcCommand(self.PLAY_MEDIA)
+
+    def stopMedia(self):
+        ''' Stop medialist '''
+        self.sendVlcCommand(self.STOP_MEDIA)
 
     def pauseFile(self):
         ''' Toggle pause on/off '''
