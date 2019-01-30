@@ -1,67 +1,63 @@
+'''
+filemanager contains class for managin files on device
+'''
 import os
 import errors
 from libs import VLC_CONFIG
 
-class FileManager():
+#TODO: send error to user if absolute_path doesn't exists
+def get_directories(absolute_path):
+    ''' get list of directories in abslute_path '''
+    directories = []
+    for item in os.listdir(absolute_path):
+        if os.path.isdir(os.path.join(absolute_path, item)):
+            directories.append(item)
+    directories.sort()
+    return directories
 
-    def __init__(self):
-        pass
+def get_files(absolute_path):
+    ''' get list of files in abslute_path '''
+    files = []
+    for item in os.listdir(absolute_path):
+        if not os.path.isdir(os.path.join(absolute_path, item)):
+            files.append(item)
+    files.sort()
+    return files
 
-    #TODO: send error to user if absolutePath doesn't exists
-    def getDirectories(self, absolutePath):
-        directories = []
-        for item in os.listdir(absolutePath):
-            if os.path.isdir(os.path.join(absolutePath, item)):
-                directories.append(item)
-        directories.sort()
-        return directories
+def is_filetype_allowed(file_name):
+    '''
+    Filted files according to config.json.
+    The config is vlc.allowedFileTypes
+    '''
+    # If there is no vlc config at all. We can allow all filetypes
+    if not VLC_CONFIG:
+        return True
+    # If allowedFileTypes is not defined. We can allow all filetypes
+    if not VLC_CONFIG['allowedFileTypes']:
+        return True
 
-    def getFiles(self, absolutePath):
-        files = []
-        for item in os.listdir(absolutePath):
-            if not os.path.isdir(os.path.join(absolutePath, item)):
-                files.append(item)
-        files.sort()
-        return files
+    file_type = file_name.split(".")[-1]
+    if file_type in VLC_CONFIG['allowedFileTypes']:
+        return True
 
-    def isFileTypeAllowed(self, fileName):
-        '''
-        Filted files according to config.json.
-        The config is vlc.allowedFileTypes
-        '''
-        # If there is no vlc config at all. We can allow all filetypes
-        if not VLC_CONFIG:
-            return True
-        # If allowedFileTypes is not defined. We can allow all filetypes
-        elif not VLC_CONFIG['allowedFileTypes']:
-            return True
+    return False
 
-        fileType = fileName.split(".")[-1]
-        if fileType in VLC_CONFIG['allowedFileTypes']:
-            return True
+def get_files_and_folders(absolute_path) -> dict:
+    '''
+    Get all files and folders form absolute_path in alphabetical order.
+    Filter files according to config.json. Logic in is_filetype_allowed
+    '''
+    if not os.path.isdir(absolute_path):
+        return errors.error(errors.FILE_NOT_FOUND)
+    files_and_folders = {"files": [], "folders": [], "currentPath": absolute_path}
+    for item in os.listdir(absolute_path):
+        if not os.path.isdir(os.path.join(absolute_path, item)):
+            if is_filetype_allowed(item):
+                files_and_folders['files'].append(item)
+        else:
+            files_and_folders['folders'].append(item)
 
-        return False
+    files_and_folders['files'].sort()
+    files_and_folders['folders'].sort()
 
-
-
-    def getFilesAndFolders(self, absolutePath) -> dict:
-        '''
-        Get all files and folders form absolutepath in alphabetical order.
-        Filter files according to config.json. Logic in isFileTypeAllowed
-        '''
-        if not os.path.isdir(absolutePath):
-            return errors.error(errors.FILE_NOT_FOUND)
-
-        filesAndFolders = {"files": [], "folders": [], "currentPath": absolutePath}
-
-        for item in os.listdir(absolutePath):
-            if not os.path.isdir(os.path.join(absolutePath, item)):
-                if self.isFileTypeAllowed(item):
-                    filesAndFolders['files'].append(item)
-            else:
-                filesAndFolders['folders'].append(item)
-
-        filesAndFolders['files'].sort()
-        filesAndFolders['folders'].sort()
-
-        return filesAndFolders
+    return files_and_folders

@@ -1,3 +1,6 @@
+'''
+Functions for vlc interface
+'''
 import errors
 import interface
 import messageobject
@@ -7,123 +10,150 @@ from libs.vlcwrapper import VlcWrapper
 __VLC_PLAYER = None
 __ERROR_MESSGE = None
 
-def __isVlcUsable():
+def __vlc_error():
+    ''' return False if no errors'''
     if __VLC_PLAYER:
-        return True
-    else:
-        __ERROR_MESSGE = errors.error(errors.VLC_NOT_INIT)
-    return False
+        return False
 
-def increaseVolume():
-    '''Call VlcWrapper increaseVolume function'''
-    if not __isVlcUsable():
-        return __ERROR_MESSGE
+    return errors.error(errors.VLC_NOT_INIT)
 
-    __THREAD.addToQueue(__VLC_PLAYER.increaseVolume)
+def increase_volume():
+    '''Call VlcWrapper increase_volume function'''
+    error = __vlc_error()
+    if error:
+        return error
 
-def decreaseVolume():
-    '''Call VlcWrapper decreaseVolume function'''
-    if not __isVlcUsable():
-        return __ERROR_MESSGE
+    __THREAD.add_to_queue(__VLC_PLAYER.increase_volume)
+    return False # No error message
 
-    __THREAD.addToQueue(__VLC_PLAYER.decreaseVolume)
+def decrease_volume():
+    '''Call VlcWrapper decrease_volume function'''
+    error = __vlc_error()
+    if error:
+        return error
 
-def muteVolume():
-    '''Call VlcWrapper muteVolume function'''
-    if not __isVlcUsable():
-        return __ERROR_MESSGE
+    __THREAD.add_to_queue(__VLC_PLAYER.decrease_volume)
+    return False # No error message
 
-    __THREAD.addToQueue(__VLC_PLAYER.muteVolume)
+def mute_volume():
+    '''Call VlcWrapper mute_volume function'''
+    error = __vlc_error()
+    if error:
+        return error
 
-def cycleAudioTrack():
-    '''Call VlcWrapper cycleAudioTrack function'''
-    if not __isVlcUsable():
-        return __ERROR_MESSGE
+    __THREAD.add_to_queue(__VLC_PLAYER.mute_volume)
+    return False # No error message
 
-    __THREAD.addToQueue(__VLC_PLAYER.cycleAudioTrack)
+def cycle_audio_track():
+    '''Call VlcWrapper cycle_audio_track function'''
+    error = __vlc_error()
+    if error:
+        return error
 
-def cycleSubtitleTrack():
-    '''Call VlcWrapper cycleSubtitleTrack function'''
-    if not __isVlcUsable():
-        return __ERROR_MESSGE
+    __THREAD.add_to_queue(__VLC_PLAYER.cycle_audio_track)
+    return False # No error message
 
-    __THREAD.addToQueue(__VLC_PLAYER.cycleSubtitleTrack)
+def cycle_subtitle_track():
+    '''Call VlcWrapper cycle_subtitle_track function'''
+    error = __vlc_error()
+    if error:
+        return error
 
-def playFile(absolutePath):
-    '''Call VlcWrapper playFile function'''
+    __THREAD.add_to_queue(__VLC_PLAYER.cycle_subtitle_track)
+    return False # No error message
 
-    if not __isVlcUsable():
-        return __ERROR_MESSGE
+def play_file(absolute_path):
+    '''Call VlcWrapper play_file function'''
 
-    __THREAD.addToQueue(__VLC_PLAYER.playFile, (absolutePath, ))
+    error = __vlc_error()
+    if error:
+        return error
 
-def stopMedia():
-    '''Call VlcWrapper stopMedia function'''
+    __THREAD.add_to_queue(__VLC_PLAYER.play_file, (absolute_path, ))
+    return False # No error message
 
-    if not __isVlcUsable():
-        return __ERROR_MESSGE
+def stop_media():
+    '''Call VlcWrapper stop_media function'''
 
-    __THREAD.addToQueue(__VLC_PLAYER.stopMedia)
+    error = __vlc_error()
+    if error:
+        return error
 
-def playFiles(absolutePaths):
-    '''Call VlcWrapper playFiles function'''
+    __THREAD.add_to_queue(__VLC_PLAYER.stop_media)
+    return False # No error message
 
-    if not __isVlcUsable():
-        return __ERROR_MESSGE
+def play_files(absolute_paths):
+    '''Call VlcWrapper play_files function'''
 
-    __THREAD.addToQueue(__VLC_PLAYER.playFiles, (absolutePaths, ))
+    error = __vlc_error()
+    if error:
+        return error
 
-def playNextMedia():
-    '''Call VlcWrapper playNextMedia function'''
+    __THREAD.add_to_queue(__VLC_PLAYER.play_files, (absolute_paths, ))
+    return False # No error message
 
-    if not __isVlcUsable():
-        return __ERROR_MESSGE
+def play_next_media():
+    '''Call VlcWrapper play_next_media function'''
 
-    __THREAD.addToQueue(__VLC_PLAYER.playNextMedia)
+    error = __vlc_error()
+    if error:
+        return error
 
-def playPreviousMedia():
-    '''Call VlcWrapper playPreviousMedia function'''
+    __THREAD.add_to_queue(__VLC_PLAYER.play_next_media)
+    return False # No error message
 
-    if not __isVlcUsable():
-        return __ERROR_MESSGE
+def play_previous_media():
+    '''Call VlcWrapper play_previous_media function'''
 
-    __THREAD.addToQueue(__VLC_PLAYER.playPreviousMedia)
+    error = __vlc_error()
+    if error:
+        return error
 
-def pauseFile():
-    '''Call VlcWrapper pauseFile function'''
-    if not __isVlcUsable():
-        return __ERROR_MESSGE
+    __THREAD.add_to_queue(__VLC_PLAYER.play_previous_media)
+    return False # No error message
 
-    __THREAD.addToQueue(__VLC_PLAYER.pauseFile)
+def pause_file():
+    '''Call VlcWrapper pause_file function'''
+    error = __vlc_error()
+    if error:
+        return error
 
-def fastForward():
-    ''' Call VlcWrapper fastForward function'''
-    if not __isVlcUsable():
-        return __ERROR_MESSGE
+    __THREAD.add_to_queue(__VLC_PLAYER.pause_file)
+    return False # No error message
 
-    __THREAD.addToQueue(__VLC_PLAYER.fastForward)
+def fast_forward():
+    ''' Call VlcWrapper fast_forward function'''
+    error = __vlc_error()
+    if error:
+        return error
+
+    __THREAD.add_to_queue(__VLC_PLAYER.fast_forward)
+    return False # No error message
 
 def rewind():
     ''' Call VlcWrapper rewind function'''
-    if not __isVlcUsable():
-        return __ERROR_MESSGE
+    error = __vlc_error()
+    if error:
+        return error
 
-    __THREAD.addToQueue(__VLC_PLAYER.rewind)
+    __THREAD.add_to_queue(__VLC_PLAYER.rewind)
+    return False # No error message
 
-def getCurrentlyPlaying():
-    ''' Call VlcWrapper getCurrentlyPlaying function '''
-    if not __isVlcUsable():
-        return __ERROR_MESSGE
+def get_currently_playing():
+    ''' Call VlcWrapper get_currently_playing function '''
+    error = __vlc_error()
+    if error:
+        return error
 
-    currentlyPlaying = __THREAD.callReturnFunction(__VLC_PLAYER.getCurrentlyPlaying)
-    #currentlyPlaying = __VLC_PLAYER.getCurrentlyPlaying()
-    messagedata = {"currentlyPlaying" : currentlyPlaying}
-    return messageobject.getMessageObject(VLC_INTERFACE, messagedata)
+    currently_playing = __THREAD.call_return_function(__VLC_PLAYER.get_currently_playing)
+    #currentlyPlaying = __VLC_PLAYER.get_currently_playing()
+    messagedata = {"currentlyPlaying" : currently_playing}
+    return messageobject.get_message_object(VLC_INTERFACE, messagedata)
 
 if __name__ == 'interface.vlc':
     # Vlc player needs to be initialized when vlc interface is imported
     # This means that vlc player should only be imported once
     __VLC_PLAYER = VlcWrapper()
 
-    __THREAD = interface._InterfaceThread(interface.VLC_INTERFACE)
+    __THREAD = interface.InterfaceThread(interface.VLC_INTERFACE)
     __THREAD.start()

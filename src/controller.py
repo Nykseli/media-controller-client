@@ -1,13 +1,22 @@
 #!/usr/bin/python3
+'''
+Main
+'''
 
 import os
-import errors
 import signal
 import threading
-errors.printInfo("Server starting... ")
-
+#import sys
+import json
+#import time
 from autobahn.twisted.websocket import WebSocketServerProtocol, \
     WebSocketServerFactory
+#from twisted.python import log
+from twisted.internet import reactor
+import errors
+errors.print_info("Server starting... ")
+
+
 from libs import CRYPTO_CONFIG, GENERAL_CONFIG, WEBSOCKET_CONFIG
 import libs.crypto
 import libs.deviceinfo
@@ -25,157 +34,154 @@ import interface.keyboard
 import interface.mouse
 import interface.vlc
 
-import json
-import time
+
 
 
 CRYPTO_SECRET_KEY = None
 if CRYPTO_CONFIG:
     CRYPTO_SECRET_KEY = CRYPTO_CONFIG['secretKey']
 
-def audioParser(request_json):
+def audio_parser(request_json):
     ''' Parse request_json to use requested audio interface function'''
     message = None
-    additionalInfo = None
-    if 'additionalInfo' in request_json:
-        additionalInfo = request_json ['additionalInfo']
 
-    if(request_json['command'] == 'decreaseMasterVolume'):
-        message = interface.audio.decreaseMasterVolume()
-    elif(request_json['command'] == 'increaseMasterVolume'):
-        message = interface.audio.increaseMasterVolume()
-    elif(request_json['command'] == 'muteMasterVolume'):
-        message = interface.audio.muteMasterVolume()
+    if request_json['command'] == 'decreaseMasterVolume':
+        message = interface.audio.decrease_master_volume()
+    elif request_json['command'] == 'increaseMasterVolume':
+        message = interface.audio.increase_master_volume()
+    elif request_json['command'] == 'muteMasterVolume':
+        message = interface.audio.mute_master_volume()
 
     return message
-    pass
 
-def configParser(request_json):
+
+def config_parser(request_json):
     ''' Parse request_json to use requested config interface function'''
     message = None
     if(request_json['command'] == 'getConfig'):
-        message = interface.config.getConfig(request_json)
+        message = interface.config.get_config()
     return message
 
-def generalParser(request_json):
+def general_parser(request_json):
     ''' Parse request_json to use requested general interface function'''
     message = None
-    additionalInfo = None
+    additional_info = None
     if 'additionalInfo' in request_json:
-        additionalInfo = request_json ['additionalInfo']
+        additional_info = request_json['additionalInfo']
 
     if(request_json['command'] == 'getFilesAndFolders'):
-        message = interface.general.getFilesAndFolders(additionalInfo['absolutePath'])
+        message = interface.general.get_files_and_folders(additional_info['absolutePath'])
 
     return message
 
-def keyboardParser(request_json):
+def keyboard_parser(request_json):
     ''' Parse request_json to use requested keyboard interface function'''
     message = None
-    additionalInfo = None
+    additional_info = None
     if 'additionalInfo' in request_json:
-        additionalInfo = request_json ['additionalInfo']
+        additional_info = request_json['additionalInfo']
 
-    if(request_json['command'] == 'inputString'):
-        message = interface.keyboard.inputString(additionalInfo['input'])
-    elif(request_json['command'] == 'pressEnter'):
-        message = interface.keyboard.pressEnter()
-    elif(request_json['command'] == 'pressTab'):
-        message = interface.keyboard.pressTab()
-    elif(request_json['command'] == 'pressBackSpace'):
-        message = interface.keyboard.pressBackSpace()
-    elif(request_json['command'] == 'pressArrowUp'):
-        message = interface.keyboard.pressArrowUp()
-    elif(request_json['command'] == 'pressArrowRight'):
-        message = interface.keyboard.pressArrowRight()
-    elif(request_json['command'] == 'pressArrowDown'):
-        message = interface.keyboard.pressArrowDown()
-    elif(request_json['command'] == 'pressArrowLeft'):
-        message = interface.keyboard.pressArrowLeft()
+    if request_json['command'] == 'inputString':
+        message = interface.keyboard.input_string(additional_info['input'])
+    elif request_json['command'] == 'pressEnter':
+        message = interface.keyboard.press_enter()
+    elif request_json['command'] == 'pressTab':
+        message = interface.keyboard.press_tab()
+    elif request_json['command'] == 'pressBackSpace':
+        message = interface.keyboard.press_backspace()
+    elif request_json['command'] == 'pressArrowUp':
+        message = interface.keyboard.press_arrow_up()
+    elif request_json['command'] == 'pressArrowRight':
+        message = interface.keyboard.press_arrow_righ()
+    elif request_json['command'] == 'pressArrowDown':
+        message = interface.keyboard.press_arrow_down()
+    elif request_json['command'] == 'pressArrowLeft':
+        message = interface.keyboard.press_arrow_left()
 
     return message
 
-def mouseParser(request_json):
+def mouse_parser(request_json):
     ''' Parse request_json to use requested mouse interface function'''
     message = None
-    additionalInfo = None
+    additional_info = None
     if 'additionalInfo' in request_json:
-        additionalInfo = request_json ['additionalInfo']
+        additional_info = request_json['additionalInfo']
 
-    if(request_json['command'] == 'moveMouseX'):
-        message = interface.mouse.moveMouseX(additionalInfo['amount'])
-    elif(request_json['command'] == 'moveMouseY'):
-        message = interface.mouse.moveMouseY(additionalInfo['amount'])
-    elif(request_json['command'] == 'leftMouseClick'):
-        message =  interface.mouse.leftMouseClick()
-    elif(request_json['command'] == 'setMousePosition'):
-        message = interface.mouse.setMousePosition(additionalInfo['x'], additionalInfo['y'])
+    if request_json['command'] == 'moveMouseX':
+        message = interface.mouse.move_mouse_x(additional_info['amount'])
+    elif request_json['command'] == 'moveMouseY':
+        message = interface.mouse.move_mouse_y(additional_info['amount'])
+    elif request_json['command'] == 'leftMouseClick':
+        message = interface.mouse.left_mouse_click()
+    elif request_json['command'] == 'setMousePosition':
+        message = interface.mouse.set_mouse_position(additional_info['x'], additional_info['y'])
 
     return message
 
-def vlcParser(request_json):
+def vlc_parser(request_json):
     ''' Parse request_json to use requested vlc interface function'''
     message = None
-    additionalInfo = None
+    additional_info = None
     if 'additionalInfo' in request_json:
-        additionalInfo = request_json ['additionalInfo']
+        additional_info = request_json['additionalInfo']
 
-    if(request_json['command'] == 'increaseVolume'):
-        message = interface.vlc.increaseVolume()
-    elif(request_json['command'] == 'decreaseVolume'):
-        message = interface.vlc.decreaseVolume()
-    elif(request_json['command'] == 'muteVolume'):
-        message = interface.vlc.muteVolume()
-    elif(request_json['command'] == 'playFile'):
-        message = interface.vlc.playFile(additionalInfo['absolutePath'])
-    elif(request_json['command'] == 'playFiles'):
-        message = interface.vlc.playFiles(additionalInfo['absolutePaths'])
-    elif(request_json['command'] == 'stopMedia'):
-        message = interface.vlc.stopMedia()
-    elif(request_json['command'] == 'playNextMedia'):
-        message = interface.vlc.playNextMedia()
-    elif(request_json['command'] == 'playPreviousMedia'):
-        message = interface.vlc.playPreviousMedia()
-    elif(request_json['command'] == 'cycleAudioTrack'):
-        message = interface.vlc.cycleAudioTrack()
-    elif(request_json['command'] == 'cycleSubtitleTrack'):
-        message = interface.vlc.cycleSubtitleTrack()
-    elif(request_json['command'] == 'pauseFile'):
-        message = interface.vlc.pauseFile()
-    elif(request_json['command'] == 'fastForward'):
-        message = interface.vlc.fastForward()
-    elif(request_json['command'] == 'rewind'):
+    if request_json['command'] == 'increaseVolume':
+        message = interface.vlc.increase_volume()
+    elif request_json['command'] == 'decreaseVolume':
+        message = interface.vlc.decrease_volume()
+    elif request_json['command'] == 'muteVolume':
+        message = interface.vlc.mute_volume()
+    elif request_json['command'] == 'playFile':
+        message = interface.vlc.play_file(additional_info['absolutePath'])
+    elif request_json['command'] == 'playFiles':
+        message = interface.vlc.play_files(additional_info['absolutePaths'])
+    elif request_json['command'] == 'stopMedia':
+        message = interface.vlc.stop_media()
+    elif request_json['command'] == 'playNextMedia':
+        message = interface.vlc.play_next_media()
+    elif request_json['command'] == 'playPreviousMedia':
+        message = interface.vlc.play_previous_media()
+    elif request_json['command'] == 'cycleAudioTrack':
+        message = interface.vlc.cycle_audio_track()
+    elif request_json['command'] == 'cycleSubtitleTrack':
+        message = interface.vlc.cycle_subtitle_track()
+    elif request_json['command'] == 'pauseFile':
+        message = interface.vlc.pause_file()
+    elif request_json['command'] == 'fastForward':
+        message = interface.vlc.fast_forward()
+    elif request_json['command'] == 'rewind':
         message = interface.vlc.rewind()
-    elif(request_json['command'] == 'getCurrentlyPlaying'):
-        message = interface.vlc.getCurrentlyPlaying()
+    elif request_json['command'] == 'getCurrentlyPlaying':
+        message = interface.vlc.get_currently_playing()
 
     return message
 
 
-def requestParser(request_json):
+def request_parser(request_json):
+    ''' parse requests from websocket '''
     message = None
-    if(request_json['interface'] == interface.AUDIO_INTERFACE):
-        message = audioParser(request_json)
-    elif(request_json['interface'] == interface.CONFIG_INTERFACE):
-        message = configParser(request_json)
-    elif(request_json['interface'] == interface.GENERAL_INTERFACE):
-        message = generalParser(request_json)
-    elif(request_json['interface'] == interface.KEYBOARD_INTERFACE):
-        message = keyboardParser(request_json)
-    elif(request_json['interface'] == interface.MOUSE_INTERFACE):
-        message = mouseParser(request_json)
-    elif(request_json['interface'] == interface.VLC_INTERFACE):
-        message = vlcParser(request_json)
+    if request_json['interface'] == interface.AUDIO_INTERFACE:
+        message = audio_parser(request_json)
+    elif request_json['interface'] == interface.CONFIG_INTERFACE:
+        message = config_parser(request_json)
+    elif request_json['interface'] == interface.GENERAL_INTERFACE:
+        message = general_parser(request_json)
+    elif request_json['interface'] == interface.KEYBOARD_INTERFACE:
+        message = keyboard_parser(request_json)
+    elif request_json['interface'] == interface.MOUSE_INTERFACE:
+        message = mouse_parser(request_json)
+    elif request_json['interface'] == interface.VLC_INTERFACE:
+        message = vlc_parser(request_json)
 
     if message:
         if CRYPTO_SECRET_KEY:
-            MyServerProtocol.reportCryptedMessage(message)
+            MyServerProtocol.report_encrypted_message(message)
         else:
-            MyServerProtocol.reportMessage(message)
+            MyServerProtocol.report_message(message)
 
 
 class MyServerProtocol(WebSocketServerProtocol):
-
+    ''' Class to handle websocet '''
     connections = []
 
     def onConnect(self, request):
@@ -189,7 +195,7 @@ class MyServerProtocol(WebSocketServerProtocol):
         if isBinary:
             print("Binary message received: {0} bytes".format(len(payload)))
             # Byte data is interpeted as crypted messsage
-            payload = libs.crypto.decryptMessageCFB(CRYPTO_SECRET_KEY, payload)
+            payload = libs.crypto.decrypt_message_cfb(CRYPTO_SECRET_KEY, payload)
         else:
             print("Text message received: {0}".format(payload.decode('utf8')))
 
@@ -200,10 +206,10 @@ class MyServerProtocol(WebSocketServerProtocol):
             return
 
         if type(request_json) is dict:
-            requestParser(request_json)
+            request_parser(request_json)
         elif type(request_json) is list:
             for command in request_json:
-                requestParser(command)
+                request_parser(command)
 
         # echo back message verbatim
         # self.sendMessage(payload, isBinary)
@@ -213,17 +219,17 @@ class MyServerProtocol(WebSocketServerProtocol):
         print("WebSocket connection closed: {0}".format(reason))
 
     @classmethod
-    def reportMessage(cls, message):
+    def report_message(cls, message):
         ''' Report plain text message to all connected clients '''
-        payload = json.dumps(message, ensure_ascii = False).encode('utf8')
+        payload = json.dumps(message, ensure_ascii=False).encode('utf8')
         for c in set(cls.connections):
             reactor.callFromThread(cls.sendMessage, c, payload)
 
     @classmethod
-    def reportCryptedMessage(cls, message):
+    def report_encrypted_message(cls, message):
         ''' Report crypted message to all connected clients '''
-        messageStr = json.dumps(message, ensure_ascii = False)
-        payload = libs.crypto.cryptMessageCFB(CRYPTO_SECRET_KEY, messageStr)
+        message_string = json.dumps(message, ensure_ascii=False)
+        payload = libs.crypto.encrypt_message_cfb(CRYPTO_SECRET_KEY, message_string)
         print(type(payload))
         for c in set(cls.connections):
             reactor.callFromThread(cls.sendMessage, c, payload, True)
@@ -233,10 +239,10 @@ class ProgramStopper:
     ''' Listen SIGINT and SIGTERM signals and stop all threads and reactor object when signal recieved '''
     def __init__(self):
         #os.setsid()
-        signal.signal(signal.SIGINT, self.setKillThread)
-        signal.signal(signal.SIGTERM, self.setKillThread)
+        signal.signal(signal.SIGINT, self.set_kill_thread)
+        signal.signal(signal.SIGTERM, self.set_kill_thread)
 
-    def setKillThread(self, signum, frame):
+    def set_kill_thread(self, signum, frame):
         # Loop all threads and set kill value to kill
         # Note that this only works if the thread class is implemented
         # in such a way that it stops working when kill is set to True
@@ -247,13 +253,6 @@ class ProgramStopper:
         reactor.stop()
 
 if __name__ == '__main__':
-
-    import sys
-
-    from twisted.python import log
-    from twisted.internet import reactor
-
-    #log.startLogging(sys.stdout)
 
     stopper = ProgramStopper()
 
@@ -268,8 +267,8 @@ if __name__ == '__main__':
     if WEBSOCKET_CONFIG and 'allowedOrigins' in WEBSOCKET_CONFIG:
         factory.setProtocolOptions(allowedOrigins=WEBSOCKET_CONFIG['allowedOrigins'])
 
-    localIp = libs.deviceinfo.getLocalIp()
-    errors.printInfo("Server running... Connect to ws://{}:{}".format(localIp, WEBSOCKET_PORT))
+    local_ip = libs.deviceinfo.get_local_ip()
+    errors.print_info("Server running... Connect to ws://{}:{}".format(local_ip, WEBSOCKET_PORT))
 
     reactor.listenTCP(WEBSOCKET_PORT, factory)
     reactor.run()

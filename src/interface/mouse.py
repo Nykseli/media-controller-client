@@ -1,51 +1,61 @@
+'''
+Functions for mouse interface
+'''
 import interface
 from libs.xdotool import XDoTool
 
 __X_DO_TOOL = None
 __ERROR_MESSGE = None
 
-def __isMouseUsable():
+def __mouse_error():
     if __X_DO_TOOL:
-        return True
-    else:
-        __ERROR_MESSGE = {"error": "Mouse not initialized"}
-    return False
+        return False
 
-def leftMouseClick():
-    '''Call XDoTool leftMouseClick function'''
-    if not __isMouseUsable():
-        return __ERROR_MESSGE
+    return  {"error": "Mouse not initialized"}
 
-    __THREAD.addToQueue(__X_DO_TOOL.leftMouseClick)
+def left_mouse_click():
+    '''Call XDoTool left_mouse_click function'''
+    error = __mouse_error()
+    if error:
+        return error
 
-def moveMouseX(amount):
-    '''Call XDoTool moveMouseX function'''
+    __THREAD.add_to_queue(__X_DO_TOOL.left_mouse_click)
+    return False # We don't want to return anything
 
-    if not __isMouseUsable():
-        return __ERROR_MESSGE
+def move_mouse_x(amount):
+    '''Call XDoTool move_mouse_x function'''
 
-    __THREAD.addToQueue(__X_DO_TOOL.moveMouseX, (amount, ))
+    error = __mouse_error()
+    if error:
+        return error
 
-def moveMouseY(amount):
-    '''Call XDoTool moveMouseY function'''
+    __THREAD.add_to_queue(__X_DO_TOOL.move_mouse_x, (amount, ))
+    return False # We don't want to return anything
 
-    if not __isMouseUsable():
-        return __ERROR_MESSGE
+def move_mouse_y(amount):
+    '''Call XDoTool move_mouse_y function'''
 
-    __THREAD.addToQueue(__X_DO_TOOL.moveMouseY, (amount, ))
+    error = __mouse_error()
+    if error:
+        return error
 
-def setMousePosition(x, y):
-    '''Call XDoTool setMousePosition function'''
+    __THREAD.add_to_queue(__X_DO_TOOL.move_mouse_y, (amount, ))
+    return False # We don't want to return anything
 
-    if not __isMouseUsable():
-        return __ERROR_MESSGE
+def set_mouse_position(_x, _y):
+    '''Call XDoTool set_mouse_position function'''
 
-    __THREAD.addToQueue(__X_DO_TOOL.setMousePosition, (x, y))
+    error = __mouse_error()
+    if error:
+        return error
+
+    __THREAD.add_to_queue(__X_DO_TOOL.set_mouse_position, (_x, _y))
+    return False # We don't want to return anything
 
 
 if __name__ == 'interface.mouse':
     # XDoTool needs to be initialized when mouse interface is imported
     __X_DO_TOOL = XDoTool()
 
-    __THREAD = interface._InterfaceThread(interface.MOUSE_INTERFACE)
+    __THREAD = interface.InterfaceThread(interface.MOUSE_INTERFACE)
     __THREAD.start()

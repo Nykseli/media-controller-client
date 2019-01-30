@@ -1,27 +1,28 @@
-
+'''
+Functions for general interface
+'''
 import interface
-from libs.filemanager import FileManager
+import libs.filemanager as filemanager
 
-__FILE_MANAGER = None
+__FILE_MANAGER = True
 __ERROR_MESSGE = None
 
-def __isGeneralUsable():
+def __general_error():
     if __FILE_MANAGER:
-        return True
-    else:
-        __ERROR_MESSGE = {"error": "General not initialized"}
-    return False
+        return False
 
-def getFilesAndFolders(absolutePath):
-    '''Call FileManager getFilesAndFolders function'''
-    if not __isGeneralUsable():
-        return __ERROR_MESSGE
+    return {"error": "General not initialized"}
 
-    return __THREAD.callReturnFunction(__FILE_MANAGER.getFilesAndFolders, (absolutePath, ))
+def get_files_and_folders(absolute_path):
+    '''Call FileManager get_files_and_folders function'''
+    error = __general_error()
+    if error:
+        return error
+
+    return __THREAD.call_return_function(filemanager.get_files_and_folders, (absolute_path, ))
 
 if __name__ == 'interface.general':
     # FileManager needs to be initialized when mouse interface is imported
-    __FILE_MANAGER = FileManager()
 
-    __THREAD = interface._InterfaceThread(interface.GENERAL_INTERFACE)
+    __THREAD = interface.InterfaceThread(interface.GENERAL_INTERFACE)
     __THREAD.start()

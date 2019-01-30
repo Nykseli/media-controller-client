@@ -1,3 +1,10 @@
+'''
+Interface helper user by modules in interface
+'''
+import time
+import queue
+import signal
+import threading
 
 # Name of the audio interface
 AUDIO_INTERFACE = "audio"
@@ -17,17 +24,14 @@ MOUSE_INTERFACE = "mouse"
 # Name of the vlc interface
 VLC_INTERFACE = "vlc"
 
-import time
-import queue
-import signal
-import threading
 
-class _InterfaceThread(threading.Thread):
+class InterfaceThread(threading.Thread):
+    ''' Threading class that is used by interfaces '''
 
-    def __init__(self, interFaceName):
-        super(_InterfaceThread, self).__init__()
+    def __init__(self, interface_name):
+        super(InterfaceThread, self).__init__()
         self.setDaemon(True)
-        self.name = interFaceName + "_thread"
+        self.name = interface_name + "_thread"
         self.queue = queue.Queue()
         self.kill = False
         self.timeout = 1 / 100 # Loop 100 times in second
@@ -57,17 +61,17 @@ class _InterfaceThread(threading.Thread):
 
             time.sleep(self.timeout)
 
-    def addToQueue(self, function, args: tuple=None, **kwargs):
+    def add_to_queue(self, function, args: tuple = None, **kwargs):
         ''' Append function call to threads queue '''
         self.queue.put((function, args, kwargs))
 
-    def callReturnFunction(self, function, args: tuple=None, **kwargs):
+    def call_return_function(self, function, args: tuple = None, **kwargs):
         ''' Use this function when you need return value from function call'''
         if args and kwargs:
             return function(*args, kwargs)
-        elif args:
+        if args:
             return function(*args)
-        elif kwargs:
+        if kwargs:
             return function(kwargs)
-        else:
-            return function()
+
+        return function()

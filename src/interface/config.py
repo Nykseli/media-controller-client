@@ -1,24 +1,26 @@
+'''
+Functions for config interface
+'''
+
 from libs import CONFIG
 
 __CONFIG = None
 __ERROR_MESSGE = None
 
-def __isConfigUsable():
+def __config_error():
+    ''' Return False if usable '''
     if __CONFIG:
-        return True
-    else:
-        __ERROR_MESSGE = {"error": "Config not initialized"}
-    return False
+        return False
 
-def getConfig(absolutePath):
+    return {"error": "Config not initialized"}
+
+def get_config():
     '''Call VlcWrapper playFile function'''
-
-    if not __isConfigUsable():
-        return __ERROR_MESSGE
+    error = __config_error()
+    if error:
+        return error
 
     return {"config": __CONFIG}
-
-
 
 if __name__ == 'interface.config':
     # Vlc player needs to be initialized when vlc interface is imported
@@ -27,4 +29,3 @@ if __name__ == 'interface.config':
 
     #TODO: implement interface._InterfaceThreading when config has functions
     # that process something
-

@@ -1,11 +1,12 @@
-
-
+'''
+Functions for getting information about the device
+'''
 import subprocess
 #import socket
-import urllib
-import json
+#import urllib
+#import json
 
-def getLocalIp():
+def get_local_ip():
     ''' Get ipv4 address of the local network '''
     ## More portable solution  that doesn't work with vpn ##
     #s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -16,7 +17,7 @@ def getLocalIp():
     ipadrr = subprocess.check_output("ip route | tail -1 | awk '{print $9}'", shell=True)
     return ipadrr.decode().replace("\n", "")
 
-def getPublicIp():
+def get_public_ip():
     ''' Get netwoks public ipv4'''
-    data = json.loads(urllib.urlopen("http://ip.jsontest.com/").read())
-    return data["ip"]
+    #TODO: Do this properly
+    return None

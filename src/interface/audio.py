@@ -1,40 +1,44 @@
+'''
+Functions for audio interface
+'''
+
 import interface
-from libs.audiomanager import AudioManager
+import libs.audiomanager as __AUDIO_MANAGER
 
-__AUDIO_MANAGER = None
-__ERROR_MESSGE = None
 
-def __isAudioUsable():
-    if __AUDIO_MANAGER:
-        return True
-    else:
-        __ERROR_MESSGE = {"error": "Audio not initialized"}
+def __audio_error():
+    ''' Return False if usable '''
+    # TODO: config for disabling audio
+
     return False
 
-def decreaseMasterVolume():
-    '''Call AudioManager decreaseMasterVolume function'''
-    if not __isAudioUsable():
-        return __ERROR_MESSGE
+def decrease_master_volume():
+    '''Call AudioManager decrease_master_volume function'''
+    error = __audio_error()
+    if error:
+        return error
 
-    __THREAD.addToQueue(__AUDIO_MANAGER.decreaseMasterVolume)
+    __THREAD.add_to_queue(__AUDIO_MANAGER.decrease_master_volume)
+    return None # We dont want to return anything
 
-def increaseMasterVolume():
-    '''Call AudioManager increaseMasterVolume function'''
-    if not __isAudioUsable():
-        return __ERROR_MESSGE
+def increase_master_volume():
+    '''Call AudioManager increase_master_volume function'''
+    error = __audio_error()
+    if error:
+        return error
 
-    __THREAD.addToQueue(__AUDIO_MANAGER.increaseMasterVolume)
+    __THREAD.add_to_queue(__AUDIO_MANAGER.increase_master_volume)
+    return None # We dont want to return anything
 
-def muteMasterVolume():
-    '''Call AudioManager muteMasterVolume function'''
-    if not __isAudioUsable():
-        return __ERROR_MESSGE
+def mute_master_volume():
+    '''Call AudioManager mute_master_volume function'''
+    error = __audio_error()
+    if error:
+        return error
 
-    __THREAD.addToQueue(__AUDIO_MANAGER.muteMasterVolume)
+    __THREAD.add_to_queue(__AUDIO_MANAGER.mute_master_volume)
+    return None # We dont want to return anything
 
 if __name__ == 'interface.audio':
-    # AudioManager needs to be initialized when mouse interface is imported
-    __AUDIO_MANAGER = AudioManager()
-
-    __THREAD = interface._InterfaceThread(interface.AUDIO_INTERFACE)
+    __THREAD = interface.InterfaceThread(interface.AUDIO_INTERFACE)
     __THREAD.start()

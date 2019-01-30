@@ -9,10 +9,11 @@ Server sends back data in following format
 }
 '''
 
-def getMessageObject(interfaceName, messageDataObject):
-    dataObject = {
-        "interface": interfaceName,
-        "messageData": messageDataObject
+def get_message_object(interface_name, message_data_object):
+    ''' Get message object in format defined by README.md '''
+    data_object = {
+        "interface": interface_name,
+        "messageData": message_data_object
     }
 
-    return dataObject
+    return data_object
