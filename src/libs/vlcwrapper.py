@@ -158,6 +158,7 @@ class VlcWrapper():
     def play_files(self, paths):
         ''' Clear playlist, add new items from path array to playlist and play them. '''
         self.clear_playlist()
+        self.stop_media() # Stop media to avoid bug where new files don't start to play
         for file in paths:
             #print(file)
             self.enqueue_to_playlist(file)
