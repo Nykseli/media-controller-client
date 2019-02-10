@@ -4,6 +4,9 @@ Helper module for errors
 '''
 import sys
 
+# Browser errors
+BROWSER_NOT_INIT = "Browser is not initialized"
+
 #General errors
 UNKNOWN_ERROR = "Unknown error!"
 FILE_NOT_FOUND = "File doesn't exists!"

@@ -28,6 +28,7 @@ if GENERAL_CONFIG and 'display' in GENERAL_CONFIG:
 # interfaces should be only imported in contoller.py
 import interface
 import interface.audio
+import interface.browser
 import interface.config
 import interface.general
 import interface.keyboard
@@ -54,6 +55,16 @@ def audio_parser(request_json):
 
     return message
 
+def browser_parser(request_json):
+    ''' Parse request_json to use the requested browser interface function '''
+    message = None
+
+    if request_json['command'] == 'startBrowser':
+        message = interface.browser.start_browser()
+    elif request_json['command'] == 'stopBrowser':
+        message = interface.browser.stop_browser()
+
+    return message
 
 def config_parser(request_json):
     ''' Parse request_json to use requested config interface function'''
@@ -162,6 +173,8 @@ def request_parser(request_json):
     message = None
     if request_json['interface'] == interface.AUDIO_INTERFACE:
         message = audio_parser(request_json)
+    elif request_json['interface'] == interface.BROWSER_INTERFACE:
+        message = browser_parser(request_json)
     elif request_json['interface'] == interface.CONFIG_INTERFACE:
         message = config_parser(request_json)
     elif request_json['interface'] == interface.GENERAL_INTERFACE:

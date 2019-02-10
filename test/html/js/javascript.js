@@ -114,3 +114,11 @@ function pressTab(){
 function pressBackSpace(){
     sock.send(commandBuilder("keyboard", 'pressBackSpace'));
 }
+
+function startBrowser(){
+    sock.send(commandBuilder("browser", 'startBrowser'));
+}
+
+function stopBrowser(){
+    sock.send(commandBuilder("browser", 'stopBrowser'));
+}

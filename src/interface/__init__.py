@@ -9,6 +9,9 @@ import threading
 # Name of the audio interface
 AUDIO_INTERFACE = "audio"
 
+# Name of the browser interface
+BROWSER_INTERFACE = "browser"
+
 # Name of the confgoi interface
 CONFIG_INTERFACE = "config"
 
