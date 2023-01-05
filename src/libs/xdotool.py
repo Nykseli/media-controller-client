@@ -320,8 +320,9 @@ class XDoTool():
             result = self.input_single_char(_c)
             time.sleep(0.05) # Short sleep makes sure that the chars are typed in right order
             if result:
+                print(result)
                 return result
-            return None
+        return None
 
     def get_all_windows(self):
         #TODO: get all visible window names

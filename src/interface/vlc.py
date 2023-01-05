@@ -150,9 +150,11 @@ def get_currently_playing():
     messagedata = {"currentlyPlaying" : currently_playing}
     return messageobject.get_message_object(VLC_INTERFACE, messagedata)
 
-if __name__ == 'interface.vlc':
-    # Vlc player needs to be initialized when vlc interface is imported
-    # This means that vlc player should only be imported once
+def init():
+    global __VLC_PLAYER
+    if __VLC_PLAYER:
+        return
+
     __VLC_PLAYER = VlcWrapper()
 
     __THREAD = interface.InterfaceThread(interface.VLC_INTERFACE)

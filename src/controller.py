@@ -6,7 +6,7 @@ Main
 import os
 import signal
 import threading
-#import sys
+import sys
 import json
 #import time
 from autobahn.twisted.websocket import WebSocketServerProtocol, \
@@ -33,10 +33,7 @@ import interface.config
 import interface.general
 import interface.keyboard
 import interface.mouse
-import interface.vlc
-
-
-
+import interface.vlc as vlc
 
 CRYPTO_SECRET_KEY = None
 if CRYPTO_CONFIG:
@@ -266,8 +263,10 @@ class ProgramStopper:
         reactor.stop()
 
 if __name__ == '__main__':
-
     stopper = ProgramStopper()
+
+    if not '--no-vlc' in sys.argv:
+        vlc.init()
 
     WEBSOCKET_PORT = 9000
     if WEBSOCKET_CONFIG and 'port' in WEBSOCKET_CONFIG:
